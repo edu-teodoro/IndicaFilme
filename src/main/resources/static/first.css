@@ -1,0 +1,202 @@
+/* Configurações gerais de espaçamento e box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos gerais do corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px;
+
+}
+
+/* Gradiente dinâmico no fundo, que segue o movimento do mouse */
+.background-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+    background-color: #1a1a1a;
+}
+
+/* Container principal que organiza o conteúdo */
+.main-container {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+.title-container {
+    text-align: left;
+    margin-bottom: -50px;
+}
+
+/* Estilo do título principal da página */
+h1 {
+    font-family: 'Arial Black', helvetica, sans-serif;
+    font-size: 8rem;
+    color: #fff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+/* Estilo geral do container dos filtros e resultados */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+/* Estilos para o container dos filtros */
+.filters-container {
+    background-color: #1f1f1f;
+    padding: 30px;
+    border: none;
+    box-shadow: 0px -4px 17px rgba(0, 0, 0, 1.08);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    outline: none;
+    border-radius: 12px;
+}
+
+/* Estilos para as linhas dos filtros */
+.filter-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* Estilos dos campos de seleção */
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #1f1f1f;
+    color: #ffffffa7;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Estilos do botão */
+button {
+    background-color: #e5012b;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+/* Efeito hover no botão */
+button:hover {
+    background-color: #ff002f;
+}
+
+/* Container dos resultados */
+.results-container {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+}
+
+/* Efeito hover na caixa de resultados */
+.results-container:hover {
+    transform: scale(1.02); /* Leve aumento ao passar o mouse */
+}
+
+/* Estilo dos cards de atividades */
+.card {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card h3 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.card p {
+    color: #aaa;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.card .details {
+    font-size: 0.9rem;
+    margin-top: 40px;
+    color: #ddd;
+}
+
+.info-paragraph {
+    color: #bbb;
+    font-size: 0.6rem;
+    margin-top: 10px;
+}
+
+/* Estilos para dispositivos móveis (telas menores) */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        margin-bottom: 40px;
+    }
+
+    .filter-row {
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 5rem;
+        margin-bottom: 30px;
+        font-family: -apple-system, BlinkMacSystemFont,"San Francisco", "Roboto", Arial, sans-serif;
+        font-weight: 900; /* Para garantir que Black seja usado */
+
+    }
+
+    /* Ajustar os campos de pesquisa no mobile */
+    select {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    /* Ajustar os botões no mobile */
+    button {
+        font-size: 1rem;
+        padding: 13px;
+    }
+
+    /* Ajustar o título dos cards no mobile */
+    .card h3 {
+        font-size: 2rem;
+    }
+
+    
+}
