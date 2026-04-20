@@ -8,7 +8,10 @@ import java.util.List;
 /**
  * DTO (Data Transfer Object) para representar os dados de um filme na API.
  * 
- * <p>Em vez de expor a entidade {@link Movie} diretamente, usamos o {@code MovieDto} para controlar exatamente quais campos são enviados na resposta da API. Isso é uma boa prática para evitar acoplamento e permitir formatações específicas (ex: notas formatadas).</p>
+ * <p>Em vez de expor a entidade {@link Movie} diretamente para o cliente,
+ * usamos este objeto intermediário. Assim controlamos exatamente quais
+ * campos o usuário pode ver - nunca campos internos como flags de status
+ * que não são relevantes para o público.
  */
 
 public class MovieDto {
@@ -86,7 +89,7 @@ public class MovieDto {
      * 
      * @param divina nota divina (pode ser null).
      * @param publico nota do público (pode ser null).
-     * @return smédia formatada, ou nota disponível caso apenas uma exista, ou "_" se ambas forem nulas.
+     * @return média formatada, ou nota disponível caso apenas uma exista, ou "_" se ambas forem nulas.
      */
 
     private static String calcularMedia(Double divina, Double publico) {
@@ -97,55 +100,17 @@ public class MovieDto {
         return formatarNota((divina + publico) / 2.0);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public List<String> getGeneros() {
-        return generos;
-    }
-
-    public Integer getDuracao() {
-        return duracao;
-    }
-
-    public Integer getAnolancamento() {
-        return anolancamento;
-    }
-
-    public String getSinopse() {
-        return sinopse;
-    }
-
-    public String getNotaDivina() {
-        return notaDivina;
-    }
-
-    public String getNotaPublico() {
-        return notaPublico;
-    }
-
-    public String getMediaNotas() {
-        return mediaNotas;
-    }
-
-    public String getMotivoRecomendacao() {
-        return motivoRecomendacao;
-    }
-
-    public List<Plataform> getPlataformas() {
-        return plataformas;
-    }
-
-    public String getPoster() {
-        return poster;
-    }
+    public String getId() { return id; }
+    public String getTitulo() { return titulo; }
+    public String getAutor() { return autor; }
+    public List<String> getGeneros() { return generos; }
+    public Integer getDuracao() { return duracao; }
+    public Integer getAnolancamento() { return anolancamento; }
+    public String getSinopse() { return sinopse; }
+    public String getNotaDivina() { return notaDivina; }
+    public String getNotaPublico() { return notaPublico; }
+    public String getMediaNotas() { return mediaNotas; }
+    public String getMotivoRecomendacao() { return motivoRecomendacao; }
+    public List<Plataform> getPlataformas() { return plataformas; }
+    public String getPoster() { return poster; }
 }

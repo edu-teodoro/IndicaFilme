@@ -38,7 +38,7 @@ import java.util.List;
 public record MovieSearchCriteria(
                 List<String> generos,
                 List<String> duracoes,
-                List<String> decadas) {
+                List<Integer> decadas) {
 
         /**
          * Construtor compacto que normaliza automaticamente os gêneros ao criar o
@@ -56,19 +56,21 @@ public record MovieSearchCriteria(
                                                 .map(d -> d == null ? null : d.trim().toUpperCase())
                                                 .toList();
 
-                decadas = decadas == null ? null
-                                : decadas.stream()
-                                                .map(ano -> ano == null ? null : (ano / 10) * 10)
-                                                .toList();
+                decadas = decadas == null ? null :
+                        decadas.stream()
+                            .map(ano -> ano == null ? null : (ano / 10) * 10)
+                            .toList();
         }
 
         /**
          * Normaliza um texto para comparação uniforme:
+         * remove espaços, converte para maiúsculas e elimina acentos.
+         *
+         * ex: {@code "Ação"} -> {@code "ACAO"}
          * 
-         * @param valor
-         * @return
+         * @param valor texto a normalizar.
+         * @return texto normalizado, ou {@code null} se o valor for nulo/vazio
          */
-
         public static String normalizar(String valor) {
                 if (valor == null || valor.isBlank())
                         return null;

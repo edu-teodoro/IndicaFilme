@@ -6,6 +6,18 @@ import jakarta.validation.constraints.*;
 
 import java.util.List;
 
+/**
+ * DTO de requisição para criação e atualização de filmes (endpoints admin)
+ *
+ * usado no corpo das requisições {@code POST} e {@code PUT} dos endpoints admin.
+ * Todos os campos obrigatórios estão anotados com {@code @NotBlank} ou {@code @NotNull}.
+ *
+ * Validações aplicadas pelo String:
+ *      Título, autor e sinopse são obrigatórios.
+ *      Notas devem estar entre 0 e 10.
+ *      Duração deve ser positiva.
+ *      Ano de lançamento deve estar entre 1888 e 2100
+ */
 public class MovieRequestDto {
     @NotBlank(message = "O título é obrigatório")
     private String titulo;
@@ -40,6 +52,7 @@ public class MovieRequestDto {
 
     private List<Plataform> plataformas;
 
+    /** Status de curadoria do filme. Padrão: {@code AGUARDANDO} */
     private StatusFilme status = StatusFilme.AGUARDANDO;
 
     // Getters e Setters

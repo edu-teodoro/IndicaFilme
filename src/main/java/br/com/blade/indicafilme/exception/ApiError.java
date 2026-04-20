@@ -3,7 +3,7 @@ package br.com.blade.indicafilme.exception;
 import java.time.LocalDateTime;
 
 public class ApiError{
-    private LocalDateTime timestamp = localDateTime.now();
+    private LocalDateTime timestamp = LocalDateTime.now();
     private int status;
     private String message;
     private String path;

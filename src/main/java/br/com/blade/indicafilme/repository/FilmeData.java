@@ -6,6 +6,18 @@ import br.com.blade.indicafilme.model.StatusFilme;
 
 import java.util.List;
 
+/**
+ * Catálogo estático de filmes do sistema Indica Filmes.
+ *
+ * Este é o equivalente java do antigo banco de dados em memória.
+ * Todos os filmes são definidos aqui manualmente pelo administrador.
+ *
+ * Como adicionar um filme: crie um novo objeto {@link Movie} no método
+ * {@link #todos()} seguindo o padrão dos existentes, com status {@link StatusFilme#ATIVO}.
+ *
+ * Migração para MongoDB: quando o banco estiver ativo, o {@code DataLoader}
+ * insere estes dados automaticamente no primeiro start da aplicação
+ */
 public class FilmeData {
 
     public static List<Movie> todos() {
