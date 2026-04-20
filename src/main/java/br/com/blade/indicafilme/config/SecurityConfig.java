@@ -41,8 +41,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Configuração de segurança da aplicação Indica Filmes.
  * 
- * <p>Inclui: CORS dinâmico, headers de segurança (CSP, anti-clickjacking, MIME sniffing, referrer policy, permissions policy),
- * autenticação via API Key com comparação timing-safe, e rate limiting por IP nos endpoints admin.</p>
+ * Inclui: CORS dinâmico, headers de segurança (CSP, anti-clickjacking, MIME sniffing, referrer policy, permissions policy),
+ * autenticação via API Key com comparação timing-safe, e rate limiting por IP nos endpoints admin.
  */
 @Configuration
 @EnableWebSecurity
@@ -118,7 +118,8 @@ public class SecurityConfig {
 
         List<String> origins = new ArrayList<>(List.of(
                 "http://localhost:8080",
-                "http://localhost:3000"));
+                "http://localhost:3000"
+        ));
 
         if (corsOrigins != null && !corsOrigins.isBlank()) {
             Arrays.stream(corsOrigins.split(","))

@@ -6,6 +6,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * Propriedades de config do admin do sistema
+ *
+ * Os valores são lidos automaticamente do {@code application.yml} pelo Spring Boot.
+ * prefixo: {@code admin}.
+ *
+ * A chave de API ({@code api-key}) protege os endpoints de admin.
+ * Defina via variável de ambiente {@code ADMIN_API_KEY} em produção.
+ *
+ * Ex de config no YAML:
+ * admin:
+ *  api-key: minha_chave_secreta
+ */
 @Component
 @ConfigurationProperties(prefix = "admin")
 public class AdminProperties {
