@@ -84,20 +84,24 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.deny())
-                        .contentTypeOptions(ct -> {
-                        })
-                        .referrerPolicy(rp -> rp.policy(
-                                ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
-                        .contentSecurityPolicy(csp -> csp.policyDirectives(
-                                "default-src 'self'; " +
-                                        "script-src 'self'; " +
-                                        "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
-                                        "font-src 'self' https://fonts.gstatic.com; " +
-                                        "img-src 'self' https://image.tmdb.org data:; " +
-                                        "connect-src 'self'; " +
-                                        "frame-ancestors 'none';")))
+                .headers(headers -> {
+                    headers.frameOptions(frame -> frame.deny());
+                    headers.contentTypeOptions(ct -> {
+                    });
+                    headers.referrerPolicy(rp -> rp.policy(
+                            ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN));
+                    headers.permissionsPolicy(pp -> pp.policy(
+                            "camera=(), microphone=(), geolocation=(), payment=()"));
+                    headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+                            "default-src 'self'; " +
+                                    "script-src 'self'; " +
+                                    "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
+                                    "font-src 'self' https://fonts.gstatic.com; " +
+                                    "img-src 'self' https://image.tmdb.org data:; " +
+                                    "connect-src 'self'; " +
+                                    "frame-ancestors 'none'"
+                    ));
+                })
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/admin/**").authenticated()
                         .requestMatchers("/actuator/health").permitAll()

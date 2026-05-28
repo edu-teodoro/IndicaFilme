@@ -4,30 +4,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
-/**
- * Representa um filme no sistema Indica Filmes.
- *
- * Persistido na coleção {@code movies} do MongoDB.
- *
- * Campos "divinos" ({@code notaDivina}, {@code motivoRecomendacao}) são
- * definidos por você, o administrador, diretamente no banco via MongoDB Compass.
- * Os demais são dados públicos do fillme.
- */
+
 @Document(collection = "movies")
 public class Movie {
 
-    /**
-     * Identificador único gerado automaticamente pelo MongoDB.
-     * {@code @Id} instrui o Spring Data a usar este campo como chave primária
-     */
     @Id
     private String id;
     private String titulo;
     private String autor;
-    /**
-     * Status de curadoria.
-     * Apenas filmes {@link StatusFilme#ATIVO} aparecem para os usuários
-     */
     private StatusFilme status = StatusFilme.AGUARDANDO;
     private List<String> generos;
     private Integer duracao;

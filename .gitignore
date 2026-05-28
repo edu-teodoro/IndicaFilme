@@ -1,0 +1,40 @@
+# -- Build / MVN
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# - IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+# - Logs e saídas temporárias
+*.log
+mvn-out.txt
+mvn-err.txt
+test-output.txt
+logs/
+
+# - Variaveis de ambiente e segredos
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+
+# - Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# - Outros
+*.bak
+*.tmp
+*.swp

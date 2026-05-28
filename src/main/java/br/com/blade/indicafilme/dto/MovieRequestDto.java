@@ -97,4 +97,60 @@ public class MovieRequestDto {
     public void setGeneros(List<String> generos) {
         this.generos = generos;
     }
+
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
+    }
+
+    public Double getNotaDivina() {
+        return notaDivina;
+    }
+
+    public void setNotaDivina(Double notaDivina) {
+        this.notaDivina = notaDivina;
+    }
+
+    public Double getNotaPublico() {
+        return notaPublico;
+    }
+
+    public void setNotaPublico(Double notaPublico) {
+        this.notaPublico = notaPublico;
+    }
+
+    public String getMotivoRecomendacao() {
+        return motivoRecomendacao;
+    }
+
+    public void setMotivoRecomendacao(String motivoRecomendacao) {
+        this.motivoRecomendacao = motivoRecomendacao;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public List<Plataform> getPlataformas() {
+        return plataformas;
+    }
+
+    public void setPlataformas(List<Plataform> plataformas) {
+        this.plataformas = plataformas;
+    }
+
+    public StatusFilme getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusFilme status) {
+        this.status = status;
+    }
 }

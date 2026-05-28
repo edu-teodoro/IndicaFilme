@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Indica Filmes - descubra o que assistir hoje com filtros de gênero, duração e décadas. Sorteio inteligente de filmes!">
+    <meta name="keywords"
+        content="filmes, indicações de filmes, sorteio de filmes, gêneros de filmes, duração de filmes, décadas de filmes, indicação, sorteio, cinema, streaming">
+    <meta name="author" content="Blade">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph (Facebook, Whatsapp, Linkedin) -->
+    <meta property="og:title" content="Indica Filmes">
+    <meta property="og:description"
+        content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Indica Filmes">
+    <meta name="twitter:description"
+        content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="homepage.css">
+    <title>Indica Filmes - Descubra o que assistir hoje</title>
+</head>
+
+<body>
+
+    <div class="background-gradient" id="gradient"></div>
+
+    <!-- Tela Principal (index) -->
+    <div id="tela-principal" class="main-containter">
+
+        <div class="title-container">
+            <h1>Indica Filmes</h1>
+            <p class="subtitle">Selecione os filtros e descubra o que assistir hoje</p>
+        </div>
+
+        <div class="container">
+
+            <!-- Filtros -->
+            <div class="filters-container">
+
+                <!-- Gênero: até 3 seleções ou digitação livre -->
+                <div class="filter-group">
+                    <label class="filter-label">Gênero <span class="hint">(até 3)</span></label>
+                    <div class="tags-container" id="generos-tags">
+                        <span class="tag" data-valor="Ação">Ação</span>
+                        <span class="tag" data-valor="Aventura">Aventura</span>
+                        <span class="tag" data-valor="Animação">Animação</span>
+                        <span class="tag" data-valor="Comédia">Comédia</span>
+                        <span class="tag" data-valor="Drama">Drama</span>
+                        <span class="tag" data-valor="Fantasia">Fantasia</span>
+                        <span class="tag" data-valor="Ficção Científica">Ficção Científica</span>
+                        <span class="tag" data-valor="Romance">Romance</span>
+                        <span class="tag" data-valor="Suspense">Suspense</span>
+                        <span class="tag" data-valor="Terror">Terror</span>
+                        <span class="tag" data-valor="Thriller">Thriller</span>
+                    </div>
+                    <label for="genero-custom" class="sr-only">Digite um gênero</label>
+                    <input type="text" id="genero-custom" class="filter-input" placeholder="Ou digite um gênero...">
+
+                    <!-- Duração: até 3 seleções -->
+                    <div class="filter-group">
+                        <label class="filter-label">Duração <span class="hint">(escolha uma)</span></label>
+                        <div class="tags-container" id="duracoes-tags">
+                            <span class="tag" data-valor="CURTA">Curta (até 60 min)</span>
+                            <span class="tag" data-valor="MEDIA">Média (61 a 110 min)</span>
+                            <span class="tag" data-valor="LONGA">Longa (mais de 110 min)</span>
+                        </div>
+                    </div>
+
+                    <!-- Década: até 3 seleções ou digitação de ano específico-->
+                    <div class="filter-group">
+                        <label class="filter-label">Década <span class="hint">(até 3)</span></label>
+                        <div class="tags-container" id="decadas-tags">
+                            <span class="tag" data-valor="1970">Anos 70</span>
+                            <span class="tag" data-valor="1980">Anos 80</span>
+                            <span class="tag" data-valor="1990">Anos 90</span>
+                            <span class="tag" data-valor="2000">Anos 2000</span>
+                            <span class="tag" data-valor="2010">Anos 2010</span>
+                            <span class="tag" data-valor="2020">Anos 2020</span>
+                        </div>
+                        <label for="decada-custom" class="sr-only">Digite um ano</label>
+                        <input type="number" id="decada-custom" class="filter-input"
+                            placeholder="Ou digite um ano (ex: 1995)..." min="1900">
+                    </div>
+
+                    <!-- Botões de ação -->
+                    <div class="botoes-container">
+                        <button id="sortear-btn" class="btn-primario">Sortear Filme</button>
+                        <button id="listar-btn" class="btn-secundario">Ver todos os Filmes</button>
+                    </div>
+                    <button id="limpar-btn" class="btn-limpar"> Limpar Filtros</button>
+
+                </div>
+
+                <!-- ÁREA DE RESULTADOS -->
+                <div class="results-container" id="results-container">
+                    <div class="card mensagem-card" id="description-card">
+                        <h3>Seu próximo filmes está aqui</h3>
+                        <br>
+                        <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que
+                            assistir hoje!</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TELA DE DETALHES DO FILME (abre ao sortear) -->
+        <div id="tela-detalhes" class="details-container" style="display: none;">
+
+            <!-- Mantém os filtros no topo -->
+            <div class="detalhes-filtros">
+                <div class="filtros-resumo" id="filtros-resumo"></div>
+                <div class="detalhes-botoes">
+                    <button id="sortear-novamente-btn" class="btn-primario">Sortear Outro</button>
+                    <button id="voltar-btn" class="btn-secundario">← Voltar</button>
+                </div>
+            </div>
+
+            <!-- Card principal do filme sorteado -->
+            <div class="filme-detalhes" id="filme-detalhes-content"></div>
+
+        </div>
+
+        <footer>
+            <p>Indica Filmes. &copy; Desenvolvido por @obladepontokom (Blade). <span id="footer-year"></span></p>
+        </footer>
+
+        <script src="app.js"></script>
+
+</body>
+
+</html>
