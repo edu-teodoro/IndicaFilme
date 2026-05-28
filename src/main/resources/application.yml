@@ -6,26 +6,25 @@ spring:
       # Em produção: define a variável de ambiente MONGODB_URI no servidor
       uri: ${MONGODB_URI:mongodb://REDACTED
 
-  # Nome da aplicação (aparece nos logs e no Actuator)
-  application:
-    name: indica-filmes
+    # Nome da aplicação (aparece nos logs e no Actuator)
+    application:
+      name: indica-filmes
 
 server:
   port: 8080
 
 logging:
   level:
-  br.com.blade.indicafilme: ${LOG_LEVEL:INFO}
+    br.com.blade.indicafilme: ${LOG_LEVEL:INFO}
 
-
-# Swagger/OpenAPI
-  springdoc:
-    api-docs:
-      path: /api-docs
-    swagger-ui:
-      path: /swagger-ui.html
-      operarions-sorter: method
-      enabled: ${SWAGGER_ENABLED:false}
+  # Swagger/OpenAPI
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    enabled: ${SWAGGER_ENABLED:false}
 
 # TMDB
 tmdb:
@@ -42,10 +41,10 @@ cors:
 
 # Actuator (Health check)
 management:
-    endpoints:
-      web:
-        exposure:
-          include: health
-    endpoint:
-      health:
-        show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

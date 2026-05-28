@@ -52,39 +52,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão de sortear
     document.getElementById("sortear-btn").addEventListener("click", async () => {
-        const {
-            generos,
-            duracoes,
-            decadas
-        } = estado;
+        const { generos, duracoes, decadas } = estado;
         if (!generos.length && !duracoes.length && !decadas.length) {
             mostrarMensagem("Por favor, selecione pelo menos um filtro.");
             return;
         }
-        ultimosCriteria = {
-            generos: [...generos],
-            duracoes: [...duracoes],
-            decadas: [...decadas]
-        };
+        ultimosCriteria = { generos: [...generos], duracoes: [...duracoes], decadas: [...decadas] };
         await sortearFilme(ultimosCriteria);
     });
 
     // Botão Listar
     document.getElementById("listar-btn").addEventListener("click", async () => {
-        const {
-            generos,
-            duracoes,
-            decadas
-        } = estado;
+        const { generos, duracoes, decadas } = estado;
         if (!generos.length && !duracoes.length && !decadas.length) {
             mostrarMensagem("Por favor, selecione pelo menos um filtro.");
             return;
         }
-        await listarFilmes({
-            generos: [...generos],
-            duracoes: [...duracoes],
-            decadas: [...decadas]
-        });
+        await listarFilmes({ generos: [...generos], duracoes: [...duracoes], decadas: [...decadas] });
     });
 
     // Botão Sortear Outro (na tela de detalhes)
@@ -160,11 +144,7 @@ function configurarTags(containerId, lista, max, isNumerico) {
 /**
     Mostra os parametros da URL com multiplos valores por chave
 */
-function montarParams({
-    generos,
-    duracoes,
-    decadas
-}) {
+function montarParams({ generos, duracoes, decadas }) {
     const params = new URLSearchParams();
     generos.forEach(g => params.append("generos", g));
     duracoes.forEach(d => params.append("duracoes", d));
@@ -249,7 +229,7 @@ function abrirTelaDetalhes(filme, criteria) {
     if (criteria.generos.length) partes.push(criteria.generos.join(", "));
     if (criteria.duracoes.length) partes.push(criteria.duracoes.join(", "));
     if (criteria.decadas.length) partes.push(criteria.decadas.join(", "));
-    resume.textContent = "Filtros: " + partes.join(" . ");
+    resumo.textContent = "Filtros: " + partes.join(" . ");
 
     // Mostrar o conteúdo de detalhes do filme (com escapeHTML para prevenir XSS)
     const content = document.getElementById("filme-detalhes-content");
@@ -305,7 +285,7 @@ function abrirTelaDetalhes(filme, criteria) {
                 <p>${escapeHTML(filme.motivoRecomendacao)}</p>
             </div>` : ""}
 
-            <div class="plataformas-container"></div>
+            <div class="plataformas-container">
                 <h4>Onde assistir?</h4>
                 <div class="plataformas-lista">${plataformas}</div>
             </div>
@@ -315,7 +295,6 @@ function abrirTelaDetalhes(filme, criteria) {
                     <a href="${SUGERIR_FILME_LINK}" target="_blank" rel="noopener noreferrer" class="sugerir-link"><u>Sugerir Filme</u></a>
                 </p>
             </div>
-
         </div>
     `;
 
@@ -330,9 +309,9 @@ function criarCardResumo(filme) {
     card.classList.add("card", "card-resumo");
 
     const posterUrl = escapeUrl(filme.poster);
-    const miniPoster = filme.poster ?
-        `<img src="${posterUrl}" alt="${escapeHTML(filme.titulo)}" class="poster-mini" />` :
-        "";
+    const miniPoster = filme.poster 
+        ? `<img src="${posterUrl}" alt="${escapeHTML(filme.titulo)}" class="poster-mini" />`
+        : "";
 
     const sinopseText = filme.sinopse ? escapeHTML(filme.sinopse.substring(0, 300)) + (filme.sinopse.length > 300 ? "..." : "") : "";
 
@@ -341,8 +320,7 @@ function criarCardResumo(filme) {
             ${miniPoster}
             <div class="card-resumo-info">
                 <h3>${escapeHtml(filme.titulo)} <span class="ano">(${escapeHtml(filme.anoLancamento) || "-"})</span></h3>
-                <p class="generos-resumo">${filme.generos?.map(g => escapeHtml(g)).join(", ") || "-"} . ${filme.duracao ? escapeHtml(filme.duracao) + "min" :
-                 "-"}</p>
+                <p class="generos-resumo">${filme.generos?.map(g => escapeHtml(g)).join(", ") || "-"} . ${filme.duracao ? escapeHtml(filme.duracao) + "min" : "-"}</p>
                  <div class="notas-resumo">
                     <span> ${escapeHtml(filme.notaDivina) || "-"}</span>
                     <span> ${escapeHtml(filme.notaPublico) || "-"}</span>
@@ -352,11 +330,7 @@ function criarCardResumo(filme) {
             </div>
         </div>
     `;
-    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || {
-        generos: [],
-        duracoes: [],
-        decadas: []
-    }));
+    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || { generos: [], duracoes: [], decadas: [] }));
     return card;
 }
 
