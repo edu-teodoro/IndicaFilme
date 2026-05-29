@@ -1,5 +1,6 @@
 package br.com.blade.indicafilme.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.servlet.FilterChain;
@@ -11,20 +12,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -37,21 +38,13 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
-/**
- * Configuração de segurança da aplicação Indica Filmes.
- * 
- * Inclui: CORS dinâmico, headers de segurança (CSP, anti-clickjacking, MIME sniffing, referrer policy, permissions policy),
- * autenticação via API Key com comparação timing-safe, e rate limiting por IP nos endpoints admin.
- */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
     public static final String ADMIN_KEY_HEADER = "X-Admin-Key";
-
     private static final int ADMIN_RATE_LIMIT = 10;
 
     private final AdminProperties adminProperties;
@@ -59,7 +52,6 @@ public class SecurityConfig {
     @Value("${cors.allowed-origins:}")
     private String corsOrigins;
 
-    /** Cache de rate limit: IP -> contador de requisições. Expira em 1 minuto. */
     private final Cache<String, AtomicInteger> rateLimitCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.MINUTES)
             .maximumSize(10_000)
@@ -69,11 +61,6 @@ public class SecurityConfig {
         this.adminProperties = adminProperties;
     }
 
-    /**
-     * Limpa o cache de rate limit.
-     * Usado nos testes para evitar que requisições acumuladas entre em test classes
-     * causam falsos 429 (Too Many Requests).
-     */
     public void resetRateLimitCache() {
         rateLimitCache.invalidateAll();
     }
@@ -86,51 +73,39 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .headers(headers -> {
                     headers.frameOptions(frame -> frame.deny());
-                    headers.contentTypeOptions(ct -> {
-                    });
+                    headers.contentTypeOptions(ct -> {});
                     headers.referrerPolicy(rp -> rp.policy(
                             ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN));
-                    headers.permissionsPolicy(pp -> pp.policy(
-                            "camera=(), microphone=(), geolocation=(), payment=()"));
+                    headers.addHeaderWriter(new StaticHeadersWriter(
+                            "Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()"));
                     headers.contentSecurityPolicy(csp -> csp.policyDirectives(
                             "default-src 'self'; " +
-                                    "script-src 'self'; " +
-                                    "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
-                                    "font-src 'self' https://fonts.gstatic.com; " +
-                                    "img-src 'self' https://image.tmdb.org data:; " +
-                                    "connect-src 'self'; " +
-                                    "frame-ancestors 'none'"
+                            "script-src 'self'; " +
+                            "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
+                            "font-src 'self' https://fonts.gstatic.com; " +
+                            "img-src 'self' https://image.tmdb.org data:; " +
+                            "connect-src 'self'; " +
+                            "frame-ancestors 'none'"
                     ));
                 })
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/admin/**").authenticated()
                         .requestMatchers("/actuator/health").permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().permitAll()
+                )
                 .addFilterBefore(adminRateLimitFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(adminApiKeyFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    /**
-     * Configuração de CORS - permite origens configuradas via variável de ambiente.
-     * Em produção, defina CORS_ORIGINS=https://seu-dominio.com
-     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-
-        List<String> origins = new ArrayList<>(List.of(
-                "http://localhost:8080",
-                "http://localhost:3000"
-        ));
+        List<String> origins = new ArrayList<>(List.of("http://localhost:8080", "http://localhost:3000"));
 
         if (corsOrigins != null && !corsOrigins.isBlank()) {
-            Arrays.stream(corsOrigins.split(","))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .forEach(origins::add);
-            log.info("CORS: origens adicionais configurados: {}", corsOrigins);
+            Arrays.stream(corsOrigins.split(",")).map(String::trim).filter(s -> !s.isEmpty()).forEach(origins::add);
         }
 
         config.setAllowedOrigins(origins);
@@ -144,27 +119,16 @@ public class SecurityConfig {
         return source;
     }
 
-    /**
-     * Rate limiting por IP para endpoints admin.
-     * Máximo de {@value #ADMIN_RATE_LIMIT} requisições por minuto por IP.
-     */
     @Bean
     public OncePerRequestFilter adminRateLimitFilter() {
-
         return new OncePerRequestFilter() {
             @Override
-            protected void doFilterInternal(HttpServletRequest request, 
-                                            HttpServletResponse response, 
-                                            FilterChain filterChain)
-                    throws ServletException, IOException {
-
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain filterChain) throws ServletException, IOException {
                 if (request.getRequestURI().startsWith("/api/v1/admin/")) {
                     String ip = request.getRemoteAddr();
                     AtomicInteger counter = rateLimitCache.get(ip, k -> new AtomicInteger(0));
-                    int count = counter.incrementAndGet();
-
-                    if (count > ADMIN_RATE_LIMIT) {
-                        log.warn("Rate limit excedido: ip={}, count={}", ip, count);
+                    if (counter.incrementAndGet() > ADMIN_RATE_LIMIT) {
                         response.setStatus(429);
                         response.setContentType("application/json;charset=UTF-8");
                         Map<String, Object> body = new LinkedHashMap<>();
@@ -175,33 +139,24 @@ public class SecurityConfig {
                         return;
                     }
                 }
-
                 filterChain.doFilter(request, response);
             }
         };
     }
 
-    /**
-     * Filtro que valida o header {@code X-Admin-Key} para rotas admin.
-     * Usa comparação timing-safe para evitar ataques de timing side-channel.
-     */
     @Bean
     public OncePerRequestFilter adminApiKeyFilter() {
         return new OncePerRequestFilter() {
-        @Override
-            protected void doFilterInternal(HttpServletRequest request,
-                                            HttpServletResponse response, 
-                                            FilterChain filterChain)
-                    throws ServletException, IOException { 
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain filterChain) throws ServletException, IOException {
                 String path = request.getRequestURI();
-
                 if (path.startsWith("/api/v1/admin/")) {
                     String key = request.getHeader(ADMIN_KEY_HEADER);
                     String expected = adminProperties.getApiKey();
 
-                    if (expected == null || expected.isBlank()|| !timingSafeEquals(expected, key)) {
-                        log.warn("Tentativa de acesso admin não autorizado: path={}, ip={}", 
-                                path, request.getRemoteAddr());
+                    if (expected == null || expected.isBlank() || !timingSafeEquals(expected, key)) {
+                        log.warn("Tentativa de acesso admin não autorizado: path={}, ip={}", path, request.getRemoteAddr());
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setContentType("application/json;charset=UTF-8");
                         Map<String, Object> body = new LinkedHashMap<>();
@@ -211,29 +166,20 @@ public class SecurityConfig {
                         response.getWriter().write(objectMapper.writeValueAsString(body));
                         return;
                     }
-                    
-                    log.debug("Acesso admin autorizado: path={}, ip={}", path);
-                    SecurityContextHolder.getContext()
-                    .setAuthentication(new UsernamePasswordAuthenticationToken(
-                        "admin", null, 
-                        List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
-                        ));
-                    }
 
-                filterChain.doFilter(request, response);
+                    SecurityContextHolder.getContext().setAuthentication(
+                        new UsernamePasswordAuthenticationToken("admin", null,
+                                    List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))));
                 }
-            };
-        }
+                filterChain.doFilter(request, response);
+            }
+        };
+    }
 
-    /**
-     * Comparação timing-safe de duas strings.
-     * Evita ataques de timing que tentam adivinhar a API Key caractere por caractere.
-     */
     private static boolean timingSafeEquals(String expected, String actual) {
         if (actual == null) return false;
         return MessageDigest.isEqual(
-            expected.getBytes(StandardCharsets.UTF_8), 
-            actual.getBytes(StandardCharsets.UTF_8)
-        );
+                expected.getBytes(StandardCharsets.UTF_8),
+                actual.getBytes(StandardCharsets.UTF_8));
     }
 }

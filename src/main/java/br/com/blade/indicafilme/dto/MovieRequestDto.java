@@ -1,36 +1,26 @@
 package br.com.blade.indicafilme.dto;
 
-import br.com.blade.indicafilme.model.Plataform;
+import br.com.blade.indicafilme.model.Platform;
 import br.com.blade.indicafilme.model.StatusFilme;
+import br.com.blade.indicafilme.validation.AnoMaximoAtual;
 import jakarta.validation.constraints.*;
 
 import java.util.List;
 
-/**
- * DTO de requisição para criação e atualização de filmes (endpoints admin)
- *
- * usado no corpo das requisições {@code POST} e {@code PUT} dos endpoints admin.
- * Todos os campos obrigatórios estão anotados com {@code @NotBlank} ou {@code @NotNull}.
- *
- * Validações aplicadas pelo String:
- *      Título, autor e sinopse são obrigatórios.
- *      Notas devem estar entre 0 e 10.
- *      Duração deve ser positiva.
- *      Ano de lançamento deve estar entre 1888 e 2100
- */
 public class MovieRequestDto {
+
     @NotBlank(message = "O título é obrigatório")
     private String titulo;
 
-    @NotBlank(message = "O autor é obrigatório")
+    @NotBlank(message = "O nome do autor/diretor é obrigatório")
     private String autor;
 
-   @NotNull(message = "O ano de lançamento é obrigatório")
-   @Min(value = 1888, message = "O ano de lançamento deve ser a partir de 1888")
-   @Max(value = 2100, message = "O ano de lançamento deve ser até 2100")
+    @NotNull(message = "O ano de lançamento é obrigatório")
+    @Min(value = 1888, message = "O ano de lançamento deve ser a partir de 1888")
+    @AnoMaximoAtual
     private Integer anolancamento;
 
-   @Positive(message = "A duração deve ser um valor positivo em minutos")
+    @Positive(message = "A duração deve ser um valor positivo em minutos")
     private Integer duracao;
 
     private List<String> generos;
@@ -47,110 +37,43 @@ public class MovieRequestDto {
     private Double notaPublico;
 
     private String motivoRecomendacao;
-
     private String poster;
-
-    private List<Plataform> plataformas;
-
-    /** Status de curadoria do filme. Padrão: {@code AGUARDANDO} */
+    private List<Platform> plataformas;
     private StatusFilme status = StatusFilme.AGUARDANDO;
 
-    // Getters e Setters
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
+    public String getAutor() { return autor; }
+    public void setAutor(String autor) { this.autor = autor; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public Integer getAnolancamento() { return anolancamento; }
+    public void setAnolancamento(Integer anolancamento) { this.anolancamento = anolancamento; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public Integer getDuracao() { return duracao; }
+    public void setDuracao(Integer duracao) { this.duracao = duracao; }
 
-    public String getAutor() {
-        return autor;
-    }
+    public List<String> getGeneros() { return generos; }
+    public void setGeneros(List<String> generos) { this.generos = generos; }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+    public String getSinopse() { return sinopse; }
+    public void setSinopse(String sinopse) { this.sinopse = sinopse; }
 
-    public Integer getAnolancamento() {
-        return anolancamento;
-    }
+    public Double getNotaDivina() { return notaDivina; }
+    public void setNotaDivina(Double notaDivina) { this.notaDivina = notaDivina; }
 
-    public void setAnolancamento(Integer anolancamento) {
-        this.anolancamento = anolancamento;
-    }
+    public Double getNotaPublico() { return notaPublico; }
+    public void setNotaPublico(Double notaPublico) { this.notaPublico = notaPublico; }
 
-    public Integer getDuracao() {
-        return duracao;
-    }
+    public String getMotivoRecomendacao() { return motivoRecomendacao; }
+    public void setMotivoRecomendacao(String motivoRecomendacao) { this.motivoRecomendacao = motivoRecomendacao; }
 
-    public void setDuracao(Integer duracao) {
-        this.duracao = duracao;
-    }
+    public String getPoster() { return poster; }
+    public void setPoster(String poster) { this.poster = poster; }
 
-    public List<String> getGeneros() {
-        return generos;
-    }
+    public List<Platform> getPlataformas() { return plataformas; }
+    public void setPlataformas(List<Platform> plataformas) { this.plataformas = plataformas; }
 
-    public void setGeneros(List<String> generos) {
-        this.generos = generos;
-    }
-
-    public String getSinopse() {
-        return sinopse;
-    }
-
-    public void setSinopse(String sinopse) {
-        this.sinopse = sinopse;
-    }
-
-    public Double getNotaDivina() {
-        return notaDivina;
-    }
-
-    public void setNotaDivina(Double notaDivina) {
-        this.notaDivina = notaDivina;
-    }
-
-    public Double getNotaPublico() {
-        return notaPublico;
-    }
-
-    public void setNotaPublico(Double notaPublico) {
-        this.notaPublico = notaPublico;
-    }
-
-    public String getMotivoRecomendacao() {
-        return motivoRecomendacao;
-    }
-
-    public void setMotivoRecomendacao(String motivoRecomendacao) {
-        this.motivoRecomendacao = motivoRecomendacao;
-    }
-
-    public String getPoster() {
-        return poster;
-    }
-
-    public void setPoster(String poster) {
-        this.poster = poster;
-    }
-
-    public List<Plataform> getPlataformas() {
-        return plataformas;
-    }
-
-    public void setPlataformas(List<Plataform> plataformas) {
-        this.plataformas = plataformas;
-    }
-
-    public StatusFilme getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusFilme status) {
-        this.status = status;
-    }
+    public StatusFilme getStatus() { return status; }
+    public void setStatus(StatusFilme status) { this.status = status; }
 }

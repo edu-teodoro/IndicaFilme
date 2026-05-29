@@ -2,7 +2,7 @@ package br.com.blade.indicafilme;
 
 import br.com.blade.indicafilme.dto.MovieDto;
 import br.com.blade.indicafilme.model.Movie;
-import br.com.blade.indicafilme.model.Plataform;
+import br.com.blade.indicafilme.model.Platform;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -23,7 +23,7 @@ class MovieDtoTest {
         movie.setNotaDivina(7.5);
         movie.setNotaPublico(6.0);
         movie.setMotivoRecomendacao("Motivo");
-        Plataform netflix = new Plataform("Netflix", "https://netflix.com");
+        Platform netflix = new Platform("Netflix", "https://netflix.com");
         movie.setPlataformas(List.of(netflix));
         movie.setPoster("poster.jpg");
 
@@ -218,9 +218,9 @@ class MovieDtoTest {
     void fromMovie_multiplosPlatformas() {
         Movie movie = new Movie();
         movie.setTitulo("Filme");
-        Plataform p1 = new Plataform("Netflix", "url1");
-        Plataform p2 = new Plataform("Prime", "url2");
-        Plataform p3 = new Plataform("Disney", "url3");
+        Platform p1 = new Platform("Netflix", "url1");
+        Platform p2 = new Platform("Prime", "url2");
+        Platform p3 = new Platform("Disney", "url3");
         movie.setPlataformas(List.of(p1, p2, p3));
         MovieDto dto = MovieDto.fromMovie(movie);
         assertEquals(3, dto.getPlataformas().size());

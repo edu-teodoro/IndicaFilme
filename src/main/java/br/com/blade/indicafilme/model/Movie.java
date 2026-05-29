@@ -2,8 +2,8 @@ package br.com.blade.indicafilme.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.List;
 
+import java.util.List;
 
 @Document(collection = "movies")
 public class Movie {
@@ -20,114 +20,47 @@ public class Movie {
     private Double notaDivina;
     private Double notaPublico;
     private String motivoRecomendacao;
-    private List<Plataform> plataformas;
+    private List<Platform> plataformas;
     private String poster;
 
     public Movie() {}
 
-    // === Getters e Setters ===
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public String getId() {
-        return id;
-    }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getAutor() { return autor; }
+    public void setAutor(String autor) { this.autor = autor; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public StatusFilme getStatus() { return status; }
+    public void setStatus(StatusFilme status) { this.status = status; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public List<String> getGeneros() { return generos; }
+    public void setGeneros(List<String> generos) { this.generos = generos; }
 
-    public String getAutor() {
-        return autor;
-    }
+    public Integer getDuracao() { return duracao; }
+    public void setDuracao(Integer duracao) { this.duracao = duracao; }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+    public Integer getAnoLancamento() { return anoLancamento; }
+    public void setAnoLancamento(Integer anoLancamento) { this.anoLancamento = anoLancamento; }
 
-    public StatusFilme getStatus() {
-        return status;
-    }
+    public String getSinopse() { return sinopse; }
+    public void setSinopse(String sinopse) { this.sinopse = sinopse; }
 
-    public void setStatus(StatusFilme status) {
-        this.status = status;
-    }
+    public Double getNotaDivina() { return notaDivina; }
+    public void setNotaDivina(Double notaDivina) { this.notaDivina = notaDivina; }
 
-    public List<String> getGeneros() {
-        return generos;
-    }
+    public Double getNotaPublico() { return notaPublico; }
+    public void setNotaPublico(Double notaPublico) { this.notaPublico = notaPublico; }
 
-    public void setGeneros(List<String> generos) {
-        this.generos = generos;
-    }
+    public String getMotivoRecomendacao() { return motivoRecomendacao; }
+    public void setMotivoRecomendacao(String motivoRecomendacao) { this.motivoRecomendacao = motivoRecomendacao; }
 
-    public Integer getDuracao() {
-        return duracao;
-    }
+    public List<Platform> getPlataformas() { return plataformas; }
+    public void setPlataformas(List<Platform> plataformas) { this.plataformas = plataformas; }
 
-    public void setDuracao(Integer duracao) {
-        this.duracao = duracao;
-    }
-
-    public Integer getAnoLancamento() {
-        return anoLancamento;
-    }
-
-    public void setAnoLancamento(Integer anoLancamento) {
-        this.anoLancamento = anoLancamento;
-    }
-
-    public String getSinopse() {
-        return sinopse;
-    }
-
-    public void setSinopse(String sinopse) {
-        this.sinopse = sinopse;
-    }
-
-    public Double getNotaDivina() {
-        return notaDivina;
-    }
-
-    public void setNotaDivina(Double notaDivina) {
-        this.notaDivina = notaDivina;
-    }
-
-    public Double getNotaPublico() {
-        return notaPublico;
-    }
-
-    public void setNotaPublico(Double notaPublico) {
-        this.notaPublico = notaPublico;
-    }
-
-    public String getMotivoRecomendacao() {
-        return motivoRecomendacao;
-    }
-
-    public void setMotivoRecomendacao(String motivoRecomendacao) {
-        this.motivoRecomendacao = motivoRecomendacao;
-    }
-
-    public List<Plataform> getPlataformas() {
-        return plataformas;
-    }
-
-    public void setPlataformas(List<Plataform> plataformas) {
-        this.plataformas = plataformas;
-    }
-    public String getPoster() {
-        return poster;
-    }
-
-    public void setPoster(String poster) {
-        this.poster = poster;
-    }
-
+    public String getPoster() { return poster; }
+    public void setPoster(String poster) { this.poster = poster; }
 }

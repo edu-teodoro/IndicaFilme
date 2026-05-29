@@ -18,15 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Serviço de integração com a API do TMDB (The Movie Database).
- *
- * Responsável por buscar a nota do público ({@code vote_avarage})
- * de uma obra a partir do título e ano de lançamento.
- *
- * Resultados são cacheados por 1 hora (Caffeine) para evitar
- * chamadas repetidas à API do TMDB para o mesmo filme.
- */
+
 @Service
 public class TmdbService {
 
@@ -35,68 +27,44 @@ public class TmdbService {
     private final TmdbProperties tmdbProperties;
     private final RestTemplate restTemplate;
 
-    /** Cache de notas do TMDB: chave "titulo_ano" -> Optional<nota>. TTL de 1h. */
     private final Cache<String, Optional<Double>> tmdbCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .maximumSize(500)
             .build();
 
-    /**
-     * Construtor com injeção de dependências.
-     *
-     * @param tmdbProperties propriedades de configuração do TMDB.
-     * @param restTemplate cliente HTTP do Spring para chamadas REST.
-     */
     public TmdbService(TmdbProperties tmdbProperties, RestTemplate restTemplate) {
         this.tmdbProperties = tmdbProperties;
         this.restTemplate = restTemplate;
     }
 
-    /**
-     *
-     * Busca a nota do público no TMDB para um filme específico.
-     * Resultados são cacheados por 1 hora para evitar chamadas repetidas.
-     *
-     * @param titulo                título do filme (ex: "Interestelar").
-     * @param anoLancamento         ano de lançamento do filme (ex: 2014). Pode ser nulo.
-     * @return {@link Optional}     com a nota (0.0 a 10.0), ou vazio se não encontrado/erro.
-     */
     public Optional<Double> buscarNotaPublico(String titulo, Integer anoLancamento) {
         String apiKey = tmdbProperties.getApiKey();
-
-        if (apiKey == null || apiKey.isBlank()){
+        if (apiKey == null || apiKey.isBlank()) {
             log.debug("TMDB API Key não configurada - nota do público não será buscada.");
             return Optional.empty();
         }
-
         String cacheKey = titulo + "_" + anoLancamento;
         return tmdbCache.get(cacheKey, k -> buscarNotaPublicoInterno(titulo, anoLancamento));
     }
 
-    /**
-     * Realiza a chamada HTTP real ao TMDB. Chamado apenas em cache miss.
-     */
+    @SuppressWarnings("unchecked")
     private Optional<Double> buscarNotaPublicoInterno(String titulo, Integer anoLancamento) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder
-            .fromHttpUrl(tmdbProperties.getBaseUrl() + "/search/movies")
-            .queryParam("query", titulo)
-            .queryParam("language", "pt-BR");
+                    .fromHttpUrl(tmdbProperties.getBaseUrl() + "/search/movie")
+                    .queryParam("query", titulo)
+                    .queryParam("language", "pt-BR");
 
             if (anoLancamento != null) {
-                builder.queryParam("year", anoLancamento);                
+                builder.queryParam("year", anoLancamento);
             }
 
-            String url = builder.build().toUriString();
-            log.debug("Buscando nota TMDB para '{}' ({})", titulo, anoLancamento);
-
-            // Usa Bearer token no header em vez de api_key na query param (mais seguro)
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(tmdbProperties.getApiKey());
             HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-            @SuppressWarnings("uncheked")
-                    ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            ResponseEntity<Map> responseEntity = restTemplate.exchange(
+                    builder.build().toUriString(), HttpMethod.GET, entity, Map.class);
             Map<String, Object> response = responseEntity.getBody();
 
             if (response == null) {
@@ -104,22 +72,17 @@ public class TmdbService {
                 return Optional.empty();
             }
 
-            @SuppressWarnings("uncheked")
-                    List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
-
+            List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
             if (results == null || results.isEmpty()) {
                 log.info("TMDB: nenhum resultado para '{}' ({})", titulo, anoLancamento);
                 return Optional.empty();
             }
 
             Object voteAverage = results.get(0).get("vote_average");
-            if (voteAverage == null) {
-                return Optional.empty();
-            }
+            if (voteAverage == null) {return Optional.empty();}
 
-            double nota = ((Number) voteAverage).doubleValue();
-            log.info("TMDB: nota do público para '{}' = {}",titulo, nota);
-            return Optional.of(nota);
+            log.info("TMDB: nota do público para '{}' = {}", titulo, ((Number) voteAverage).doubleValue());
+            return Optional.of(((Number) voteAverage).doubleValue());
 
         } catch (Exception e) {
             log.warn("Erro ao buscar nota TMDB para '{}': {}", titulo, e.getMessage());

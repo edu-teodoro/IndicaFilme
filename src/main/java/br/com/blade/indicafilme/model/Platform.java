@@ -2,7 +2,7 @@ package br.com.blade.indicafilme.model;
 
 import org.springframework.data.annotation.PersistenceCreator;
 
-public record Plataform(String nome, String url) {
+public record Platform(String nome, String url) {
     @PersistenceCreator
-    public Plataform{}
+    public Platform {}
 }

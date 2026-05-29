@@ -1,7 +1,7 @@
 package br.com.blade.indicafilme;
 
 import br.com.blade.indicafilme.dto.MovieRequestDto;
-import br.com.blade.indicafilme.model.Plataform;
+import br.com.blade.indicafilme.model.Platform;
 import br.com.blade.indicafilme.model.StatusFilme;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -112,9 +112,9 @@ class MovieRequestDtoTest {
     @Test
     void getter_setter_plataformas() {
         MovieRequestDto dto = new MovieRequestDto();
-        Plataform netflix = new Plataform("Netflix", "https://netflix.com");
-        Plataform prime = new Plataform("Prime Video", "https://prime.com");
-        List<Plataform> plataformas = List.of(netflix, prime);
+        Platform netflix = new Platform("Netflix", "https://netflix.com");
+        Platform prime = new Platform("Prime Video", "https://prime.com");
+        List<Platform> plataformas = List.of(netflix, prime);
         dto.setPlataformas(plataformas);
         assertEquals(plataformas, dto.getPlataformas());
     }
@@ -451,9 +451,9 @@ class MovieRequestDtoTest {
         dto.setNotaPublico(8.5);
         dto.setMotivoRecomendacao("Filme extraordinário");
         dto.setPoster("url_poster");
-        Plataform netflix = new Plataform("Netflix", "url1");
-        Plataform amazon = new Plataform("Amazon", "url2");
-        Plataform disney = new Plataform("Disney+", "url3");
+        Platform netflix = new Platform("Netflix", "url1");
+        Platform amazon = new Platform("Amazon", "url2");
+        Platform disney = new Platform("Disney+", "url3");
         dto.setPlataformas(List.of(netflix, amazon, disney));
         dto.setStatus(StatusFilme.ATIVO);
 
