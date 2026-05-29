@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-
 @Service
 public class TmdbService {
 
@@ -40,7 +39,6 @@ public class TmdbService {
     public Optional<Double> buscarNotaPublico(String titulo, Integer anoLancamento) {
         String apiKey = tmdbProperties.getApiKey();
         if (apiKey == null || apiKey.isBlank()) {
-            log.debug("TMDB API Key não configurada - nota do público não será buscada.");
             return Optional.empty();
         }
         String cacheKey = titulo + "_" + anoLancamento;
@@ -67,23 +65,18 @@ public class TmdbService {
                     builder.build().toUriString(), HttpMethod.GET, entity, Map.class);
             Map<String, Object> response = responseEntity.getBody();
 
-            if (response == null) {
-                log.warn("TMDB retornou resposta nula para '{}'", titulo);
+            if (response == null)
                 return Optional.empty();
-            }
 
             List<Map<String, Object>> results = (List<Map<String, Object>>) response.get("results");
-            if (results == null || results.isEmpty()) {
-                log.info("TMDB: nenhum resultado para '{}' ({})", titulo, anoLancamento);
+            if (results == null || results.isEmpty())
                 return Optional.empty();
-            }
 
             Object voteAverage = results.get(0).get("vote_average");
-            if (voteAverage == null) {return Optional.empty();}
+            if (voteAverage == null)
+                return Optional.empty();
 
-            log.info("TMDB: nota do público para '{}' = {}", titulo, ((Number) voteAverage).doubleValue());
             return Optional.of(((Number) voteAverage).doubleValue());
-
         } catch (Exception e) {
             log.warn("Erro ao buscar nota TMDB para '{}': {}", titulo, e.getMessage());
             return Optional.empty();
