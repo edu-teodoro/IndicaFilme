@@ -1,9 +1,10 @@
 User-agent: *
 Allow: /
 
-# Bloquear endpoints de administração e documentação tecnica
 Disallow: /api/v1/admin/
 Disallow: /swagger-ui.html
 Disallow: /swagger-ui/
 Disallow: /api-docs
 Disallow: /api-docs/
+
+Sitemap: https://indica-filmes.onrender.com/sitemap.xml

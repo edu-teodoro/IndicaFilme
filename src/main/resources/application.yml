@@ -4,10 +4,10 @@ spring:
       uri: ${MONGODB_URI:mongodb://REDACTED
   application:
     name: indica-filmes
-web:
-  resources:
-    cache:
-      period: 86400
+  web:
+    resources:
+      cache:
+        period: 86400
 
 server:
   port: 8080
