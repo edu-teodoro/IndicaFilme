@@ -270,36 +270,16 @@ footer { text-align: center; padding: 30px 20px; color: #555; font-size: 0.8rem;
 
 /* Mobile (<480px) */
 @media (max-width: 480px) {
-  body {
-    padding: 15px;
-  }
-  h1 {
-    font-size: 3rem;
-  }
-  .subtitle {
-    font-size: 0.95rem;
-  }
-  .filters-container {
-    padding: 20px; gap: 15px;
-  }
-  .results-container {
-    padding: 15px; max-height: none;
-  }
-  .results-container:hover {
-    transform: none;
-  }
-  .card {
-    padding: 15px;
-  }
-  .card:hover {
-    transform: none;
-  }
-  .card-resumo-content {
-    flex-direction: column;
-  }
-  .poster-mini {
-    width: 100%; height: auto; max-height: 200px;
-  }
+  body { padding: 15px; }
+  h1 { font-size: 3rem; }
+  .subtitle { font-size: 0.95rem; }
+  .filters-container { padding: 20px; gap: 15px; }
+  .results-container { padding: 15px; max-height: none; }
+  .results-container:hover { transform: none; }
+  .card { padding: 15px; }
+  .card:hover { transform: none; }
+  .card-resumo-content { flex-direction: column; }
+  .poster-mini { width: 100%; height: auto; max-height: 200px; }
   .notas-container { flex-direction: column; align-items: stretch; }
   .nota-box { width: 100%; min-width: unset; }
   .filme-titulo { font-size: 1.6rem; }
