@@ -1,0 +1,58 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java-version: ['17', '21']
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Clean and Build
+      run: mvn clean package -DskipTests
+    
+    - name: Run Unit Tests
+      run: mvn test
+    
+    - name: Generate Test Report
+      if: always()
+      run: mvn surefire-report:report
+    
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results-java-${{ matrix.java-version }}
+        path: target/surefire-reports/
+        retention-days: 30
+    
+    - name: Code Quality Check
+      run: mvn verify
+    
+    - name: Build Docker Image
+      run: docker build -t indica-filmes:latest .
+    
+    - name: Publish Test Report
+      if: always()
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: target/surefire-reports/TEST-*.xml
+        check_name: Test Results
+

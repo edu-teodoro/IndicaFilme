@@ -64,7 +64,7 @@ public class MovieService {
         }
 
         Movie escolhido = elegiveis.get(random.nextInt(elegiveis.size()));
-        log.info("Filme sorteado: '{}", escolhido.getTitulo());
+        log.info("Filme sorteado: '{}'", escolhido.getTitulo());
         return Optional.of(escolhido);
     }
 
@@ -90,7 +90,7 @@ public class MovieService {
 
     public Movie save(Movie filme) {
         Movie salvo = movieRepository.save(filme);
-        log.info("Filme salvo: '{}' (id={}", salvo.getTitulo(), salvo.getId());
+        log.info("Filme salvo: '{}' (id={})", salvo.getTitulo(), salvo.getId());
         return salvo;
     }
 

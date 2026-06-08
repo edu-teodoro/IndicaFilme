@@ -33,7 +33,7 @@ class MovieDtoTest {
         assertEquals("Autor", dto.getAutor());
         assertEquals(List.of("Ação", "Drama"), dto.getGeneros());
         assertEquals(120, dto.getDuracao());
-        assertEquals(2020, dto.getAnolancamento());
+        assertEquals(2020, dto.getAnoLancamento());
         assertEquals("Sinopse", dto.getSinopse());
         assertEquals("7+", dto.getNotaDivina());
         assertEquals("6", dto.getNotaPublico());
@@ -197,7 +197,7 @@ class MovieDtoTest {
         assertNull(dto.getAutor());
         assertNull(dto.getGeneros());
         assertNull(dto.getDuracao());
-        assertNull(dto.getAnolancamento());
+        assertNull(dto.getAnoLancamento());
         assertNull(dto.getSinopse());
         assertNull(dto.getMotivoRecomendacao());
         assertNull(dto.getPlataformas());

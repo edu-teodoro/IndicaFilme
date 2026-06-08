@@ -18,7 +18,7 @@ public class MovieRequestDto {
     @NotNull(message = "O ano de lançamento é obrigatório")
     @Min(value = 1888, message = "O ano de lançamento deve ser a partir de 1888")
     @AnoMaximoAtual
-    private Integer anolancamento;
+    private Integer anoLancamento;
 
     @Positive(message = "A duração deve ser um valor positivo em minutos")
     private Integer duracao;
@@ -47,8 +47,8 @@ public class MovieRequestDto {
     public String getAutor() { return autor; }
     public void setAutor(String autor) { this.autor = autor; }
 
-    public Integer getAnolancamento() { return anolancamento; }
-    public void setAnolancamento(Integer anolancamento) { this.anolancamento = anolancamento; }
+    public Integer getAnoLancamento() { return anoLancamento; }
+    public void setAnoLancamento(Integer anoLancamento) { this.anoLancamento = anoLancamento; }
 
     public Integer getDuracao() { return duracao; }
     public void setDuracao(Integer duracao) { this.duracao = duracao; }

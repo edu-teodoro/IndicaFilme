@@ -153,4 +153,3 @@ class StatusPatchDtoTest {
         assertEquals(StatusFilme.ATIVO, dto.getStatus());
     }
 }
-

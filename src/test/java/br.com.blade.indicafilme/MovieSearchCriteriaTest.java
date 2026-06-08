@@ -217,4 +217,3 @@ class MovieSearchCriteriaTest {
         assertEquals("DRAMA", criteria.generos().get(2));
     }
 }
-

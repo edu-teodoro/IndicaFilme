@@ -30,7 +30,7 @@ class MovieRequestDtoTest {
         MovieRequestDto dto = new MovieRequestDto();
         dto.setTitulo("Filme Test");
         dto.setAutor("Diretor Test");
-        dto.setAnolancamento(2020);
+        dto.setAnoLancamento(2020);
         dto.setDuracao(120);
         dto.setSinopse("Sinopse teste");
         return dto;
@@ -55,8 +55,8 @@ class MovieRequestDtoTest {
     @Test
     void getter_setter_anolancamento() {
         MovieRequestDto dto = new MovieRequestDto();
-        dto.setAnolancamento(1994);
-        assertEquals(1994, dto.getAnolancamento());
+        dto.setAnoLancamento(1994);
+        assertEquals(1994, dto.getAnoLancamento());
     }
 
     @Test
@@ -213,7 +213,7 @@ class MovieRequestDtoTest {
     @Test
     void validacao_anolancamentoNull() {
         MovieRequestDto dto = criarDtoValido();
-        dto.setAnolancamento(null);
+        dto.setAnoLancamento(null);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertFalse(violations.isEmpty());
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("anolancamento")));
@@ -224,7 +224,7 @@ class MovieRequestDtoTest {
     @Test
     void validacao_anolancamento1888() {
         MovieRequestDto dto = criarDtoValido();
-        dto.setAnolancamento(1888);
+        dto.setAnoLancamento(1888);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
     }
@@ -232,7 +232,7 @@ class MovieRequestDtoTest {
     @Test
     void validacao_anolancamento2100() {
         MovieRequestDto dto = criarDtoValido();
-        dto.setAnolancamento(2100);
+        dto.setAnoLancamento(2100);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
     }
@@ -240,7 +240,7 @@ class MovieRequestDtoTest {
     @Test
     void validacao_anolancamentoMenorQue1888() {
         MovieRequestDto dto = criarDtoValido();
-        dto.setAnolancamento(1887);
+        dto.setAnoLancamento(1887);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertFalse(violations.isEmpty());
         assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("1888")));
@@ -249,7 +249,7 @@ class MovieRequestDtoTest {
     @Test
     void validacao_anolancamentoMaiorQue2100() {
         MovieRequestDto dto = criarDtoValido();
-        dto.setAnolancamento(2101);
+        dto.setAnoLancamento(2101);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertFalse(violations.isEmpty());
         assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("2100")));
@@ -258,7 +258,7 @@ class MovieRequestDtoTest {
     @Test
     void validacao_anolancamenoValido() {
         MovieRequestDto dto = criarDtoValido();
-        dto.setAnolancamento(1950);
+        dto.setAnoLancamento(1950);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
     }
@@ -430,7 +430,7 @@ class MovieRequestDtoTest {
         dto.setTitulo(null);
         dto.setAutor("");
         dto.setSinopse("   ");
-        dto.setAnolancamento(1800);
+        dto.setAnoLancamento(1800);
         dto.setDuracao(-50);
         Set<ConstraintViolation<MovieRequestDto>> violations = validator.validate(dto);
         assertTrue(violations.size() >= 5);
@@ -443,7 +443,7 @@ class MovieRequestDtoTest {
         MovieRequestDto dto = new MovieRequestDto();
         dto.setTitulo("Filme Completo");
         dto.setAutor("Autor Completo");
-        dto.setAnolancamento(2019);
+        dto.setAnoLancamento(2019);
         dto.setDuracao(180);
         dto.setGeneros(List.of("Action", "Thriller"));
         dto.setSinopse("Sinopse completa");
@@ -466,7 +466,7 @@ class MovieRequestDtoTest {
         MovieRequestDto dto = new MovieRequestDto();
         dto.setTitulo("T");
         dto.setAutor("A");
-        dto.setAnolancamento(1999);
+        dto.setAnoLancamento(1999);
         dto.setDuracao(1);
         dto.setSinopse("S");
 

@@ -91,7 +91,7 @@ public class AdminMovieController {
                 Movie m = new Movie();
                 m.setTitulo(dto.getTitulo());
                 m.setAutor(dto.getAutor());
-                m.setAnoLancamento(dto.getAnolancamento());
+                m.setAnoLancamento(dto.getAnoLancamento());
                 m.setDuracao(dto.getDuracao());
                 m.setGeneros(dto.getGeneros());
                 m.setSinopse(dto.getSinopse());

@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://REDACTED
+      uri: ${MONGODB_URI:}
   application:
     name: indica-filmes
   web:
@@ -14,7 +14,7 @@ server:
   compression:
     enabled: true
     min-response-size: 1024
-    mime-type: text/html,text/css,application/javascript,application/json,image/svg+xml
+    mime-types: text/html,text/css,application/javascript,application/json,image/svg+xml
 
 logging:
   level:
@@ -33,7 +33,7 @@ tmdb:
   base-url: https://api.themoviedb.org/3
 
 admin:
-  api-key: ${ADMIN_API_KEY:indica-filmes-admin-secret-2026}
+  api-key: ${ADMIN_API_KEY:}
 
 cors:
   allowed-origins: ${CORS_ORIGINS:}
@@ -47,3 +47,4 @@ management:
   endpoint:
     health:
       show-details: never
+      

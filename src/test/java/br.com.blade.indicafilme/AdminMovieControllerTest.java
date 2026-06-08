@@ -42,7 +42,7 @@ class AdminMovieControllerTest {
         MovieRequestDto dto = new MovieRequestDto();
         dto.setTitulo("Filme Admin Test");
         dto.setAutor("Diretor Test");
-        dto.setAnolancamento(2020);
+        dto.setAnoLancamento(2020);
         dto.setDuracao(120);
         dto.setSinopse("Sinopse teste");
         return dto;
@@ -433,6 +433,5 @@ class AdminMovieControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
-
 
 

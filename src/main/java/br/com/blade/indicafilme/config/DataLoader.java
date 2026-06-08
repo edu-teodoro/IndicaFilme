@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("!test")
-public class DataLoader{
+public class DataLoader {
 
     private static final Logger log = LoggerFactory.getLogger(DataLoader.class);
 

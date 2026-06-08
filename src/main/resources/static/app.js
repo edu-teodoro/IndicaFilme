@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("tela-detalhes").classList.remove("fade-in");
         document.getElementById("tela-detalhes").style.display = "none";
         document.getElementById("tela-principal").style.display = "block";
-        document.getElementById("tela-principal").classList.add = ("fade-in");
+        document.getElementById("tela-principal").classList.add("fade-in");
     });
 
     // Botão limpar filtros
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("results-container").innerHTML =
             `<div class="card mensagem-card" id="description-card">
             <h3>Seu próximo filme está aqui! 🎬</h3>
-            <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>x
+            <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
             </div > `;
     });
 
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gradient = document.getElementById("gradient");
     document.addEventListener("mousemove", (e) => {
         gradient.style.background =
-            `radial - gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229, 1, 43, 0.15),#121212 55 %)`;
+            `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229, 1, 43, 0.15),#121212 55 %)`;
     });
 });
 

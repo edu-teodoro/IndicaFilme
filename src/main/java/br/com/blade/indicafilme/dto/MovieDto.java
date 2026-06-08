@@ -12,7 +12,7 @@ public class MovieDto {
     private String autor;
     private List<String> generos;
     private Integer duracao;
-    private Integer anolancamento;
+    private Integer anoLancamento;
     private String sinopse;
     private String notaDivina;
     private String notaPublico;
@@ -28,7 +28,7 @@ public class MovieDto {
         dto.autor = movie.getAutor();
         dto.generos = movie.getGeneros();
         dto.duracao = movie.getDuracao();
-        dto.anolancamento = movie.getAnoLancamento();
+        dto.anoLancamento = movie.getAnoLancamento();
         dto.sinopse = movie.getSinopse();
         dto.motivoRecomendacao = movie.getMotivoRecomendacao();
         dto.plataformas = movie.getPlataformas();
@@ -43,7 +43,7 @@ public class MovieDto {
         if (nota == null) return "\u2014";
         int inteiro = (int) Math.floor(nota);
         double decimal = nota - inteiro;
-        return nota>= 0.5 ? inteiro + "+" : String.valueOf(inteiro);
+        return decimal >= 0.5 ? inteiro + "+" : String.valueOf(inteiro);
     }
 
     static String calcularMedia(Double divina, Double publico) {
@@ -58,7 +58,7 @@ public class MovieDto {
     public String getAutor() { return autor; }
     public List<String> getGeneros() { return generos; }
     public Integer getDuracao() { return duracao; }
-    public Integer getAnolancamento() { return anolancamento; }
+    public Integer getAnoLancamento() { return anoLancamento; }
     public String getSinopse() { return sinopse; }
     public String getNotaDivina() { return notaDivina; }
     public String getNotaPublico() { return notaPublico; }
