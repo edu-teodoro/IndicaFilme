@@ -1,23 +1,25 @@
 spring:
   data:
     mongodb:
-      # URI de conexão com o MongoDB.
-      # Em desenvolvimento local: mongodb://localhost:27017/indicafilmes
-      # Em produção: define a variável de ambiente MONGODB_URI no servidor
       uri: ${MONGODB_URI:mongodb://REDACTED
-
-    # Nome da aplicação (aparece nos logs e no Actuator)
-    application:
-      name: indica-filmes
+  application:
+    name: indica-filmes
+web:
+  resources:
+    cache:
+      period: 86400
 
 server:
   port: 8080
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-type: text/html,text/css,application/javascript,application/json,image/svg+xml
 
 logging:
   level:
     br.com.blade.indicafilme: ${LOG_LEVEL:INFO}
 
-  # Swagger/OpenAPI
 springdoc:
   api-docs:
     path: /api-docs
@@ -26,20 +28,17 @@ springdoc:
     operations-sorter: method
     enabled: ${SWAGGER_ENABLED:false}
 
-# TMDB
 tmdb:
   api-key: ${TMDB_API_KEY:}
   base-url: https://api.themoviedb.org/3
 
-# Admin (API key para endpoints protegidos)
 admin:
   api-key: ${ADMIN_API_KEY:indica-filmes-admin-secret-2026}
 
-# CORS (origens permitidas)
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:}
+  allowed-origins: ${CORS_ORIGINS:}
 
-# Actuator (Health check)
+# Actuator (Health Check)
 management:
   endpoints:
     web:

@@ -38,8 +38,6 @@ public class AdminMovieController {
         public ResponseEntity<MovieDto> criarFilme(@Valid @RequestBody MovieRequestDto dto) {
                 log.info("POST /admin/movies criando '{}'", dto.getTitulo());
                 Movie salvo = service.save(toMovie(dto));
-
-                log.info("Filme criado: '{}' (id={})", salvo.getTitulo(), salvo.getId());
                 return ResponseEntity.status(HttpStatus.CREATED).body(MovieDto.fromMovie(salvo));
         }
 
@@ -53,7 +51,6 @@ public class AdminMovieController {
                 Movie atualizado = toMovie(dto);
                 atualizado.setId(existente.getId());
                 Movie salvo = service.save(atualizado);
-                log.info("Filme atualizado: '{}' (id={})", salvo.getTitulo(), salvo.getId());
                 return ResponseEntity.ok(MovieDto.fromMovie(salvo));
         }
 
@@ -66,8 +63,8 @@ public class AdminMovieController {
 
                 if (dto.getNotaDivina() != null)filme.setNotaDivina(dto.getNotaDivina());
                 if (dto.getMotivoRecomendacao() != null)filme.setMotivoRecomendacao(dto.getMotivoRecomendacao());
+
                 Movie salvo = service.save(filme);
-                log.info("Campos divinos atualizados para filme '{}' (id={})", salvo.getTitulo(), salvo.getId());
                 return ResponseEntity.ok(MovieDto.fromMovie(salvo));
         }
 
@@ -76,8 +73,6 @@ public class AdminMovieController {
         public ResponseEntity<MovieDto> atualizarStatus(@PathVariable String id,@Valid @RequestBody StatusPatchDto dto) {
                 log.info("PATCH /admin/movies/{}/status -> {}", id, dto.getStatus());
                 Movie salvo = service.atualizarStatus(id, dto.getStatus());
-                log.info("Status do filme '{}' (id={}) atualizado para {}", salvo.getTitulo(), salvo.getId(),
-                                dto.getStatus());
                 return ResponseEntity.ok(MovieDto.fromMovie(salvo));
         }
 
@@ -89,7 +84,6 @@ public class AdminMovieController {
                         throw new NotFoundException("Filme não encontrado: " + id);
                 }
                 service.deleteById(id);
-                log.info("Filme id={} deletado com sucesso", id);
                 return ResponseEntity.noContent().build();
         }
 
