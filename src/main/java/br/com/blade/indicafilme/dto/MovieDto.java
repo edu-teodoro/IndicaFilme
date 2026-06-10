@@ -2,24 +2,16 @@ package br.com.blade.indicafilme.dto;
 
 import br.com.blade.indicafilme.model.Movie;
 import br.com.blade.indicafilme.model.Platform;
-
+import lombok.Getter;
 import java.util.List;
 
+@Getter
 public class MovieDto {
 
-    private String id;
-    private String titulo;
-    private String autor;
+    private String id, titulo, autor, sinopse, notaDivina, notaPublico, mediaNotas, motivoRecomendacao, poster;
     private List<String> generos;
-    private Integer duracao;
-    private Integer anoLancamento;
-    private String sinopse;
-    private String notaDivina;
-    private String notaPublico;
-    private String mediaNotas;
-    private String motivoRecomendacao;
+    private Integer duracao, anoLancamento;
     private List<Platform> plataformas;
-    private String poster;
 
     public static MovieDto fromMovie(Movie movie) {
         MovieDto dto = new MovieDto();
@@ -40,14 +32,13 @@ public class MovieDto {
     }
 
     static String formatarNota(Double nota){
-        if (nota == null) return "\u2014";
+        if (nota == null) return "-";
         int inteiro = (int) Math.floor(nota);
-        double decimal = nota - inteiro;
-        return decimal >= 0.5 ? inteiro + "+" : String.valueOf(inteiro);
+        return (nota - inteiro) >= 0.5 ? inteiro + "+" : String.valueOf(inteiro);
     }
 
     static String calcularMedia(Double divina, Double publico) {
-        if (divina == null && publico == null) return "\u2014";
+        if (divina == null && publico == null) return "-";
         if (divina == null) return formatarNota(publico);
         if (publico == null) return formatarNota(divina);
         return formatarNota((divina + publico) / 2.0);

@@ -1,12 +1,15 @@
 package br.com.blade.indicafilme.exception;
 
+import lombok.Getter;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
 public class ApiError{
+    @Getter
+    @Setter
     private LocalDateTime timestamp = LocalDateTime.now();
     private int status;
-    private String message;
-    private String path;
+    private String message, path;
 
     public ApiError(){}
 
@@ -16,17 +19,4 @@ public class ApiError{
         this.path = path;
     }
 
-    public LocalDateTime getTimestamp() { return timestamp; }
-
-    public int getStatus() { return status; }
-
-    public void setStatus(int status) { this.status = status; }
-
-    public String getMessage() { return message; }
-
-    public void setMessage(String message) { this.message = message; }
-
-    public String getPath() { return path; }
-
-    public void setPath(String path) { this.path = path; }
 }

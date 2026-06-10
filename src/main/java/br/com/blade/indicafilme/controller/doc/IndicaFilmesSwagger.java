@@ -9,21 +9,6 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Configuração global do Swagger / OpenAPI para o sistema Indica Filmes.
- *
- * Define as informaçoes gerais da API exibidas no Swagger UI:
- * titulo, versão, descrição e contato.
- *
- * Define tamném o esquema de segurança {@code AdminApiKey}: um API Key
- * enviado no header {@code X-Admin-Key}, exigido pelos endpoints de administração.
- *
- * para acessar os endpoints admin no Swagger UI:
- * - Clique no botão "Authorize" (ícone de cadeado) no topo da página.
- * - Infome o valor da chave configurada em {@code admin.api-key}.
- *
- * Acessar o Swagger UI em: <a href="http://localhost:8080/swagger-ui.html">http://localhost:8080/swagger-ui.html</a>
- */
 @Configuration
 @OpenAPIDefinition(
     info = @Info(
@@ -49,6 +34,5 @@ import org.springframework.context.annotation.Configuration;
     paramName = "X-Admin-Key",
     in = SecuritySchemeIn.HEADER
 )
-public class IndicaFilmesSwagger {
-    // Classe de configuração - apenas anotações, sem lógica.
-}
+public class IndicaFilmesSwagger {}
+
