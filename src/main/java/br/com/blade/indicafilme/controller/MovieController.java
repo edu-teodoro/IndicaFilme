@@ -112,7 +112,7 @@ public class MovieController {
         decadas.forEach(d -> {
             if (d < 1900 || d > limiteMax) {
                 throw new BadRequestException(
-                        "Década " + d + " inválida. Use valores entre 1900 e " + limiteMax + " (ex: 1990, 1995, 2000).");
+                        "Década " + d + " inválida. Use valores entre 1900 e " + limiteMax );
             }
         });
     }

@@ -97,7 +97,7 @@ h1 {
   display: inline-flex;
   align-items: center;
 }
-.tag:hover { background-color: var(--accent); color: var(--text-primary); }
+.tag:hover { border-color: var(--accent); color: var(--text-primary); }
 .tag.ativa { background-color: var(--accent); color: var(--text-primary); border-color: var(--accent); font-weight: 700; }
 
 /* Inputs */
@@ -175,8 +175,8 @@ h1 {
 .poster-mini { width: 60px; height: 90px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
 .card-resumo-info h3 { font-size: 1.2rem; margin-bottom: 4px; color: var(--text-primary); }
 .card-resumo-info .ano { color: var(--text-muted); font-weight: 400; font-size: 0.9rem; }
-.gerenos-resumo { color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px; }
-.notas-resumo { display: flex; gap: 12px; font-size: 0.85rem; color: #ccc; margin-top: 6px; }
+.generos-resumo { color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px; }
+.notas-resumo { display: flex; gap: 12px; font-size: 0.85rem; color: #ccc; margin-bottom: 6px; }
 .sinopse-resumo { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
 
 /* Detalhes */
@@ -196,7 +196,7 @@ h1 {
 .nota-box.nota-media { border-color: var(--accent); }
 .nota-label { display: block; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px; }
 .nota-valor { display: block; font-size: 2rem; font-weight: 900; color: var(--text-primary); }
-.nota-media .nota-valor { color：var(--accent); }
+.nota-media .nota-valor { color: var(--accent); }
 .sinopse-container, .motivo-container { margin-bottom: 20px; }
 .sinopse-container h4, .motivo-container h4, .plataformas-container h4{ font-size: 1.1rem; color: var(--text-primary); margin-bottom: 8px; }
 .sinopse-container p, .motivo-container p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
@@ -259,9 +259,9 @@ footer { text-align: center; padding: 30px 20px; color: #555; font-size: 0.8rem;
   .title-container { margin-bottom: -20px; }
   .container { grid-template-columns: 1fr; margin-bottom: 40px; }
   .botoes-container { flex-direction: column; }
-  .detalles-filtros { flex-direction: column; align-items: flex-start; }
-  .detalles-botoes { width: 100%; }
-  .detalles-botoes .btn-primario, .detalhes-botoes .btn-secundario { flex: 1; }
+  .detalhes-filtros { flex-direction: column; align-items: flex-start; }
+  .detalhes-botoes { width: 100%; }
+  .detalhes-botoes .btn-primario, .detalhes-botoes .btn-secundario { flex: 1; }
   .notas-container { flex-wrap: wrap; }
   .nota-box { min-width: 100px; flex: 1; }
   .filme-titulo { font-size: 2rem; }
