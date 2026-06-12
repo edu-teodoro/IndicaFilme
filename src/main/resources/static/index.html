@@ -4,23 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Indica Filmes - descubra o que assistir hoje com filtros de gênero, duração e décadas. Sorteio inteligente de filmes!">
-    <meta name="keywords" content="filmes, indicações de filmes, sorteio de filmes, gêneros de filmes, duração de filmes, décadas de filmes, indicação, sorteio, cinema, streaming">
+    <meta name="description"
+        content="Indica Filmes - descubra o que assistir hoje com filtros de gênero, duração e décadas. Sorteio inteligente de filmes!">
+    <meta name="keywords"
+        content="filmes, indicações de filmes, sorteio de filmes, gêneros de filmes, duração de filmes, décadas de filmes, indicação, sorteio, cinema, streaming">
     <meta name="author" content="Blade">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph (Facebook, Whatsapp, Linkedin) -->
     <meta property="og:title" content="Indica Filmes">
-    <meta property="og:description" content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
+    <meta property="og:description"
+        content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_BR">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Indica Filmes">
-    <meta name="twitter:description" content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
+    <meta name="twitter:description"
+        content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧛🏽</text></svg>">
     <link rel="canonical" href="https://indica-filmes.onrender.com/">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700;900&display=swap"
         rel="stylesheet">
@@ -36,7 +41,10 @@
             "description": "Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!",
             "applicationCategory": "EntertainmentApplication",
             "operatingSystem": "Web",
-            "author": { "@type": "Person", "name": "Blade" },
+            "author": {
+                "@type": "Person",
+                "name": "Blade"
+            },
             "inLanguage": "pt-BR"
         }
     </script>
@@ -79,13 +87,13 @@
                     <input type="text" id="genero-custom" class="filter-input" placeholder="Ou digite um gênero...">
                 </div>
 
-                <!-- Duração: até 3 seleções -->
+                <!-- Duração: escolha apenas 1 seleção -->
                 <div class="filter-group">
                     <label class="filter-label">Duração <span class="hint">(escolha uma)</span></label>
                     <div class="tags-container" id="duracoes-tags">
                         <span class="tag" data-valor="CURTA">Curta (até 60 min)</span>
-                        <span class="tag" data-valor="MEDIA">Média (61 a 110 min)</span>
-                        <span class="tag" data-valor="LONGA">Longa (mais de 110 min)</span>
+                        <span class="tag" data-valor="MEDIA">Média (61-110 min)</span>
+                        <span class="tag" data-valor="LONGA">Longa (acima de 110 min)</span>
                     </div>
                 </div>
 
@@ -107,17 +115,17 @@
 
                 <!-- Botões de ação -->
                 <div class="botoes-container">
-                    <button id="sortear-btn" class="btn-primario">Sortear Filme</button>
-                    <button id="listar-btn" class="btn-secundario">Ver todos os Filmes</button>
+                    <button id="sortear-btn" class="btn-primario">🎲 Sortear Filme</button>
+                    <button id="listar-btn" class="btn-secundario">📋 Ver todos os Filmes</button>
                 </div>
-                <button id="limpar-btn" class="btn-limpar"> Limpar Filtros</button>
+                <button id="limpar-btn" class="btn-limpar"> 🗑️ Limpar Filtros</button>
 
             </div>
 
             <!-- ÁREA DE RESULTADOS -->
             <div class="results-container" id="results-container">
                 <div class="card mensagem-card" id="description-card">
-                    <h3>Seu próximo filmes está aqui</h3>
+                    <h3>Seu próximo filme está aqui</h3>
                     <br>
                     <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que
                         assistir hoje!</p>
@@ -128,7 +136,7 @@
     </div>
 
     <!-- TELA DE DETALHES DO FILME (abre ao sortear) -->
-    <div id="tela-detalhes" class="details-container" style="display: none;">
+    <div id="tela-detalhes" class="detalhes-container" style="display:none;">
 
         <!-- Mantém os filtros no topo -->
         <div class="detalhes-filtros">

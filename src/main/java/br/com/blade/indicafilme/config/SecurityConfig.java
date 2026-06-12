@@ -76,8 +76,8 @@ public class SecurityConfig {
                     headers.contentTypeOptions(ct -> {});
                     headers.referrerPolicy(rp -> rp.policy(
                             ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN));
-                    headers.addHeaderWriter(new StaticHeadersWriter(
-                            "Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()"));
+                    headers.permissionsPolicy(pp -> pp.policy(
+                            "camera=(), microphone=(), geolocation=(), payment=()"));
                     headers.contentSecurityPolicy(csp -> csp.policyDirectives(
                             "default-src 'self'; " +
                             "script-src 'self'; " +

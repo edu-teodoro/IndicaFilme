@@ -52,23 +52,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão de sortear
     document.getElementById("sortear-btn").addEventListener("click", async () => {
-        const { generos, duracoes, decadas } = estado;
+        const {
+            generos,
+            duracoes,
+            decadas
+        } = estado;
         if (!generos.length && !duracoes.length && !decadas.length) {
-            mostrarMensagem("Por favor, selecione pelo menos um filtro.");
+            mostrarMensagem("Selecione ao menos um filtro antes de sortear!");
             return;
         }
-        ultimosCriteria = { generos: [...generos], duracoes: [...duracoes], decadas: [...decadas] };
+        ultimosCriteria = {
+            generos: [...generos],
+            duracoes: [...duracoes],
+            decadas: [...decadas]
+        };
         await sortearFilme(ultimosCriteria);
     });
 
     // Botão Listar
     document.getElementById("listar-btn").addEventListener("click", async () => {
-        const { generos, duracoes, decadas } = estado;
+        const {
+            generos,
+            duracoes,
+            decadas
+        } = estado;
         if (!generos.length && !duracoes.length && !decadas.length) {
-            mostrarMensagem("Por favor, selecione pelo menos um filtro.");
+            mostrarMensagem("Selecione ao menos um filtro para listar os filmes!");
             return;
         }
-        await listarFilmes({ generos: [...generos], duracoes: [...duracoes], decadas: [...decadas] });
+        await listarFilmes({
+            generos: [...generos],
+            duracoes: [...duracoes],
+            decadas: [...decadas]
+        });
     });
 
     // Botão Sortear Outro (na tela de detalhes)
@@ -94,9 +110,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("decada-custom").value = "";
         document.getElementById("results-container").innerHTML =
             `<div class="card mensagem-card" id="description-card">
-            <h3>Seu próximo filme está aqui! 🎬</h3>
-            <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
-            </div > `;
+                <h3>Seu próximo filme está aqui 🎬</h3>
+                <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
+            </div>`;
     });
 
     // Footer com ano dinâmico
@@ -111,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gradient = document.getElementById("gradient");
     document.addEventListener("mousemove", (e) => {
         gradient.style.background =
-            `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229, 1, 43, 0.15),#121212 55 %)`;
+            `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229,1,43,0.15),#121212 55%)`;
     });
 });
 
@@ -128,11 +144,12 @@ function configurarTags(containerId, lista, max, isNumerico) {
                 tag.classList.remove("ativa");
                 const idx = lista.indexOf(valor);
                 if (idx !== -1) lista.splice(idx, 1);
-            } else if (lista.length < max) {
-                // Para duração, desseleciona as outras antes
+            } else {
                 if (containerId === "duracoes-tags") {
                     document.querySelectorAll(`#${containerId} .tag`).forEach(t => t.classList.remove("ativa"));
                     lista.length = 0;
+                } else if (lista.length >= max) {
+                    return;
                 }
                 tag.classList.add("ativa");
                 lista.push(valor);
@@ -144,7 +161,11 @@ function configurarTags(containerId, lista, max, isNumerico) {
 /**
     Mostra os parametros da URL com multiplos valores por chave
 */
-function montarParams({ generos, duracoes, decadas }) {
+function montarParams({
+    generos,
+    duracoes,
+    decadas
+}) {
     const params = new URLSearchParams();
     generos.forEach(g => params.append("generos", g));
     duracoes.forEach(d => params.append("duracoes", d));
@@ -156,7 +177,7 @@ function montarParams({ generos, duracoes, decadas }) {
     Sorteia UM filme e abre a tela de detalhes
 */
 async function sortearFilme(criteria) {
-    mostrarLoading("Sorteando filme...");
+    mostrarLoading("Sorteando um filme...");
     setBotoesDisabled(true);
     try {
         const response = await fetch(`/api/v1/movies/random?${montarParams(criteria)}`);
@@ -231,18 +252,18 @@ function abrirTelaDetalhes(filme, criteria) {
     if (criteria.decadas.length) partes.push(criteria.decadas.join(", "));
     resumo.textContent = "Filtros: " + partes.join(" . ");
 
-    // Mostrar o conteúdo de detalhes do filme (com escapeHTML para prevenir XSS)
+    // Mostrar o conteúdo de detalhes do filme (com escapeHtml para prevenir XSS)
     const content = document.getElementById("filme-detalhes-content");
-    const generos = filme.generos?.map(g => escapeHTML(g)).join(", ") || "Não informado";
+    const generos = filme.generos?.map(g => escapeHtml(g)).join(", ") || "Não informado";
     const plataformas = filme.plataformas?.length ?
         filme.plataformas.map(p =>
-            `<a href="${escapeUrl(p.url)}" target="_blank" rel="noopener noreferrer" class="plataforma-link">${escapeHTML(p.nome)}</a>`
+            `<a href="${escapeUrl(p.url)}" target="_blank" rel="noopener noreferrer" class="plataforma-link">${escapeHtml(p.nome)}</a>`
         ).join(" ") :
         "Não disponível";
 
     const posterUrl = escapeUrl(filme.poster);
     const posterHtml = filme.poster ?
-        `<div class="poster-container"><img src="${posterUrl}" alt="Poster de ${escapeHTML(filme.titulo)}" class="poster-img" /></div>` :
+        `<div class="poster-container"><img src="${posterUrl}" alt="Poster de ${escapeHtml(filme.titulo)}" class="poster-img" /></div>` :
         "";
 
     content.innerHTML = `
@@ -250,18 +271,18 @@ function abrirTelaDetalhes(filme, criteria) {
 
             ${posterHtml}
 
-            <h1 class="filme-titulo">${escapeHTML(filme.titulo)}</h1>
+            <h1 class="filme-titulo">${escapeHtml(filme.titulo)}</h1>
 
             <div class="filme-meta">
-                <span> ${escapeHTML(filme.anoLancamento) || "-"} </span>
-                <span> ${generos} </span>
-                <span> ${filme.duracao ? escapeHtml(filme.duracao + " min") : "-"} </span>
-                <span> ${escapeHtml(filme.autor) || "-"} </span>
+                <span> ${escapeHtml(filme.anoLancamento) || "-"}</span>
+                <span> ${generos}</span>
+                <span> ${filme.duracao ? escapeHtml(filme.duracao + " min") : "-"}</span>
+                <span> ${escapeHtml(filme.autor) || "-"}</span>
             </div>
 
             <div class="notas-container">
                 <div class="nota-box">
-                    <span class="nota-label"> Nota Divina </span>
+                    <span class="nota-label">⭐ Nota Divina</span>
                     <span class="nota-valor">${escapeHtml(filme.notaDivina) || "-"}</span>
                 </div>
                 <div class="nota-box">
@@ -274,19 +295,19 @@ function abrirTelaDetalhes(filme, criteria) {
                 </div>
             </div>
         
-            <div class="sinopse-container"></div>
-                <h2>Sinopse</h2>
-                <p>${escapeHTML(filme.sinopse) || "Sinopse não disponível."}</p>
+            <div class="sinopse-container">
+                <h4>Sinopse</h4>
+                <p>${escapeHtml(filme.sinopse) || "Sinopse não disponível."}</p>
             </div>
 
             ${filme.motivoRecomendacao ? `
             <div class="motivo-container">
-                <h4>Por que assistir?</h4>
-                <p>${escapeHTML(filme.motivoRecomendacao)}</p>
+                <h4>Por que assistir? (Blade Vision)</h4>
+                <p>${escapeHtml(filme.motivoRecomendacao)}</p>
             </div>` : ""}
 
             <div class="plataformas-container">
-                <h4>Onde assistir?</h4>
+                <h4>📺 Onde assistir</h4>
                 <div class="plataformas-lista">${plataformas}</div>
             </div>
 
@@ -309,28 +330,32 @@ function criarCardResumo(filme) {
     card.classList.add("card", "card-resumo");
 
     const posterUrl = escapeUrl(filme.poster);
-    const miniPoster = filme.poster 
-        ? `<img src="${posterUrl}" alt="${escapeHTML(filme.titulo)}" class="poster-mini" />`
-        : "";
+    const miniPoster = filme.poster ?
+        `<img src="${posterUrl}" alt="${escapeHtml(filme.titulo)}" class="poster-mini" />` :
+        "";
 
-    const sinopseText = filme.sinopse ? escapeHTML(filme.sinopse.substring(0, 300)) + (filme.sinopse.length > 300 ? "..." : "") : "";
+    const sinopseText = filme.sinopse ? escapeHtml(filme.sinopse.substring(0, 300)) + (filme.sinopse.length > 300 ? "..." : "") : "";
 
     card.innerHTML = `
         <div class="card-resumo-content">
             ${miniPoster}
             <div class="card-resumo-info">
                 <h3>${escapeHtml(filme.titulo)} <span class="ano">(${escapeHtml(filme.anoLancamento) || "-"})</span></h3>
-                <p class="generos-resumo">${filme.generos?.map(g => escapeHtml(g)).join(", ") || "-"} . ${filme.duracao ? escapeHtml(filme.duracao) + "min" : "-"}</p>
-                 <div class="notas-resumo">
+                <p class="generos-resumo">${filme.generos?.map(g => escapeHtml(g)).join(", ") || "-"} . ${filme.duracao ? escapeHtml(filme.duracao) + " min" : "-"}</p>
+                <div class="notas-resumo">
                     <span> ${escapeHtml(filme.notaDivina) || "-"}</span>
                     <span> ${escapeHtml(filme.notaPublico) || "-"}</span>
                     <span> ${escapeHtml(filme.mediaNotas) || "-"}</span>
-                 </div>
+                </div>
                 <p class="sinopse-resumo">${sinopseText}</p>
             </div>
         </div>
     `;
-    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || { generos: [], duracoes: [], decadas: [] }));
+    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || {
+        generos: [],
+        duracoes: [],
+        decadas: []
+    }));
     return card;
 }
 
@@ -357,7 +382,7 @@ function escapeUrl(url) {
 /*
     Mostra mensagem simples no painel de resultados (seguro contra XSS)
 */
-function mostrarMensagem(texto){
+function mostrarMensagem(texto) {
     const container = document.getElementById("results-container");
     const card = document.createElement("div");
     card.classList.add("card", "mensagem-card");

@@ -6,7 +6,7 @@
   --border-hover: #444;
   --text-primary: #fff;
   --text-secondary: #bbb;
-  --text-muted:#888;
+  --text-muted: #888;
   --accent: #e5012b;
   --accent-hover: #ff1744;
   --radius: 12px;
@@ -16,7 +16,7 @@
   --transition: 0.2s ease;
 }
 
-* {margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
@@ -46,14 +46,14 @@ body {
   align-items: flex-start;
 }
 
-.title-container {text-align: left; margin-bottom: -50px; }
-.subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-top: -10px;  }
+.title-container { text-align: left; margin-bottom: -50px; }
+.subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-top: -10px; }
 
 h1 {
   font-family: 'Bebas Neue', 'Arial Black', sans-serif;
   font-size: 8rem;
   color: var(--text-primary);
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
   width: 100%;
 }
 
@@ -156,7 +156,7 @@ h1 {
   overflow-y: auto;
 }
 .results-container:hover { transform: scale(1.01); }
-.lista-titulo { font-size: 1.3rem; margin-bottom:15px; color: var(--text-primary); }
+.lista-titulo { font-size: 1.3rem; margin-bottom: 15px; color: var(--text-primary); }
 
 /* Cards */
 .card {
@@ -175,7 +175,7 @@ h1 {
 .poster-mini { width: 60px; height: 90px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
 .card-resumo-info h3 { font-size: 1.2rem; margin-bottom: 4px; color: var(--text-primary); }
 .card-resumo-info .ano { color: var(--text-muted); font-weight: 400; font-size: 0.9rem; }
-.generos-resumo { color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px; }
+.generos-resumo { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px; }
 .notas-resumo { display: flex; gap: 12px; font-size: 0.85rem; color: #ccc; margin-bottom: 6px; }
 .sinopse-resumo { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
 
@@ -198,7 +198,7 @@ h1 {
 .nota-valor { display: block; font-size: 2rem; font-weight: 900; color: var(--text-primary); }
 .nota-media .nota-valor { color: var(--accent); }
 .sinopse-container, .motivo-container { margin-bottom: 20px; }
-.sinopse-container h4, .motivo-container h4, .plataformas-container h4{ font-size: 1.1rem; color: var(--text-primary); margin-bottom: 8px; }
+.sinopse-container h4, .motivo-container h4, .plataformas-container h4 { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 8px; }
 .sinopse-container p, .motivo-container p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
 .plataformas-container { margin-bottom: 20px; }
 .plataformas-lista { display: flex; flex-wrap: wrap; gap: 10px; }
