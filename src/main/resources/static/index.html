@@ -4,28 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Indica Filmes - descubra o que assistir hoje com filtros de gênero, duração e décadas. Sorteio inteligente de filmes!">
-    <meta name="keywords"
-        content="filmes, indicações de filmes, sorteio de filmes, gêneros de filmes, duração de filmes, décadas de filmes, indicação, sorteio, cinema, streaming">
+    <meta name="description" content="Indica Filmes - descubra o que assistir hoje com filtros de gênero, duração e décadas. Sorteio inteligente de filmes!">
+    <meta name="keywords" content="filmes, indicações de filmes, sorteio de filmes, gêneros de filmes, duração de filmes, décadas de filmes, indicação, sorteio, cinema, streaming">
     <meta name="author" content="Blade">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph (Facebook, Whatsapp, Linkedin) -->
     <meta property="og:title" content="Indica Filmes">
-    <meta property="og:description"
-        content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
+    <meta property="og:description" content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pt_BR">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Indica Filmes">
-    <meta name="twitter:description"
-        content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
+    <meta name="twitter:description" content="Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!">
 
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧛🏽</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧛🏽</text></svg>">
     <link rel="canonical" href="https://indica-filmes.onrender.com/">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700;900&display=swap"
         rel="stylesheet">
@@ -41,18 +36,35 @@
             "description": "Descubra o que assistir hoje com sorteio inteligente de filmes por gênero, duração e décadas. Encontre o filme perfeito para sua noite!",
             "applicationCategory": "EntertainmentApplication",
             "operatingSystem": "Web",
-            "author": {
-                "@type": "Person",
-                "name": "Blade"
-            },
+            "author": { "@type": "Person", "name": "Blade" },
             "inLanguage": "pt-BR"
         }
     </script>
+    
+    <!-- Google Analytics 4 (Substitua G-xXXXXXXXXXX pela sua ID) -->
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script>
+     <script>
+        /* Descomente e configure sua ID do Google Analytics 
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXX');        
+        */
+     </script>
+
+     <!-- Font Awesome Icons -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGkJpeuLYQJiRfEsKIJLzXHUSnqykff+E1LL8GIaUVWoevBs/7cAtz07Uob6b6w/D1gfZWmUdzfGTRfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
 
     <div class="background-gradient" id="gradient"></div>
+
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" class="theme-toggle" title="Alternar entre Dark/Light Mode" aria-label="Alternar tema">
+            <span class="theme-icon">🦇</span>
+        </button>
+    </div>
 
     <!-- Tela Principal (index) -->
     <div id="tela-principal" class="main-container">
@@ -83,8 +95,6 @@
                         <span class="tag" data-valor="Terror">Terror</span>
                         <span class="tag" data-valor="Thriller">Thriller</span>
                     </div>
-                    <label for="genero-custom" class="sr-only">Digite um gênero</label>
-                    <input type="text" id="genero-custom" class="filter-input" placeholder="Ou digite um gênero...">
                 </div>
 
                 <!-- Duração: escolha apenas 1 seleção -->
@@ -92,8 +102,8 @@
                     <label class="filter-label">Duração <span class="hint">(escolha uma)</span></label>
                     <div class="tags-container" id="duracoes-tags">
                         <span class="tag" data-valor="CURTA">Curta (até 60 min)</span>
-                        <span class="tag" data-valor="MEDIA">Média (61-110 min)</span>
-                        <span class="tag" data-valor="LONGA">Longa (acima de 110 min)</span>
+                        <span class="tag" data-valor="MEDIA">Média (61 a 110 min)</span>
+                        <span class="tag" data-valor="LONGA">Longa (mais de 110 min)</span>
                     </div>
                 </div>
 
@@ -115,10 +125,10 @@
 
                 <!-- Botões de ação -->
                 <div class="botoes-container">
-                    <button id="sortear-btn" class="btn-primario">🎲 Sortear Filme</button>
-                    <button id="listar-btn" class="btn-secundario">📋 Ver todos os Filmes</button>
+                    <button id="sortear-btn" class="btn-primario">Sortear Filme</button>
+                    <button id="listar-btn" class="btn-secundario">Ver todos os Filmes</button>
                 </div>
-                <button id="limpar-btn" class="btn-limpar"> 🗑️ Limpar Filtros</button>
+                <button id="limpar-btn" class="btn-limpar"> Limpar Filtros</button>
 
             </div>
 
@@ -131,7 +141,6 @@
                         assistir hoje!</p>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -157,6 +166,7 @@
     </footer>
 
     <script src="app.js"></script>
+    <script src="fonts-loader.js"></script>
 
 </body>
 

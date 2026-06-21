@@ -17,21 +17,43 @@ let ultimosCriteria = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Theme Toogle (Dark/Light Mode)
+    const themeToggle = document.getElementById("theme-toggle");
+    const htmlElement = document.documentElement;
+    const savedTheme = localStorage.getItem("theme") || "dark";
+
+    // Aplica tema salvo
+    if (savedTheme === "light") {
+        htmlElement.style.colorScheme = "light";
+        document.body.classList.add("light-mode");
+        themeToggle.querySelector(".theme-icon").textContent = "🌞";
+    } else {
+        htmlElement.style.colorScheme = "dark";
+        document.body.classList.remove("light-mode");
+        themeToggle.querySelector(".theme-icon").textContent = "🌜";
+    }
+
+    // Toggle de tema ao clicar
+    themeToggle.addEventListener("click", () => {
+        const isLightMode = document.body.classList.contains("light-mode");
+
+        if (isLightMode) {
+            document.body.classList.remove("light-mode");
+            htmlElement.style.colorScheme = "dark";
+            localStorage.setItem("theme", "dark");
+            themeToggle.querySelector(".theme-icon").textContent = "🌜";
+        } else {
+            document.body.classList.add("light-mode");
+            htmlElement.style.colorScheme = "light";
+            localStorage.setItem("theme", "light");
+            themeToggle.querySelector(".theme-icon").textContent = "🌞";
+        }
+    });
+
     // Configura cliques nas tags
     configurarTags("generos-tags", estado.generos, 3, false);
     configurarTags("duracoes-tags", estado.duracoes, 1, false);
     configurarTags("decadas-tags", estado.decadas, 3, true);
-
-    // Input de genero digitado
-    document.getElementById("genero-custom").addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            const val = e.target.value.trim();
-            if (val && estado.generos.length < 3 && !estado.generos.includes(val)) {
-                estado.generos.push(val);
-                e.target.value = "";
-            }
-        }
-    });
 
     // Input de ano digitado -> converte para inicio da década
     document.getElementById("decada-custom").addEventListener("keydown", (e) => {
@@ -52,39 +74,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão de sortear
     document.getElementById("sortear-btn").addEventListener("click", async () => {
-        const {
-            generos,
-            duracoes,
-            decadas
-        } = estado;
-        if (!generos.length && !duracoes.length && !decadas.length) {
-            mostrarMensagem("Selecione ao menos um filtro antes de sortear!");
+        const { generos, duracoes, decadas } = estado;
+        const anoDigitado = parseInt(document.getElementById("decada-custom").value);
+        let decadasFinais = [...decadas];
+        let anoExato = null;
+
+        // Se digitou um ano válido e não pressionou Enter, converte para decada
+        if (!isNaN(anoDigitado) && anoDigitado >= 1900 && anoDigitado <= new Date().getFullYear()) {
+            anoExato = anoDigitado;
+            const decada = (Math.floor(anoDigitado / 10) * 10);
+            if (!decadasFinais.includes(decada)) {
+                decadasFinais.push(decada);
+            }
+        }
+
+        // Valida se tem ao menos um filtro
+        if (!generos.length && !duracoes.length && !decadasFinais.length) {
+            mostrarMensagem("Por favor, selecione pelo menos um filtro ou digite um ano.");
             return;
         }
-        ultimosCriteria = {
-            generos: [...generos],
-            duracoes: [...duracoes],
-            decadas: [...decadas]
-        };
+
+        ultimosCriteria = { generos: [...generos], duracoes: [...duracoes], decadas: decadasFinais, anoExato };
         await sortearFilme(ultimosCriteria);
     });
 
     // Botão Listar
     document.getElementById("listar-btn").addEventListener("click", async () => {
-        const {
-            generos,
-            duracoes,
-            decadas
-        } = estado;
-        if (!generos.length && !duracoes.length && !decadas.length) {
-            mostrarMensagem("Selecione ao menos um filtro para listar os filmes!");
+        const { generos, duracoes, decadas } = estado;
+        const anoDigitado = parseInt(document.getElementById("decada-custom").value);
+        let decadasFinais = [...decadas];
+        let anoExato = null;
+
+        // Se digitou um ano válido e não pressionou Enter, converte para década
+        if (!isNaN(anoDigitado) && anoDigitado >= 1900 && anoDigitado <= new Date().getFullYear()) {
+            anoExato = anoDigitado;
+            const decada = (Math.floor(anoDigitado / 10) * 10);
+            if (!decadasFinais.includes(decada)) {
+                decadasFinais.push(decada);
+            }
+        }
+
+        // Valida se tem ao menos um filtro
+        if (!generos.length && !duracoes.length && !decadasFinais.length) {
+            mostrarMensagem("Por favor, selecione pelo menos um filtro ou digite um ano.");
             return;
         }
-        await listarFilmes({
-            generos: [...generos],
-            duracoes: [...duracoes],
-            decadas: [...decadas]
-        });
+
+        await listarFilmes({ generos: [...generos], duracoes: [...duracoes], decadas: decadasFinais, anoExato });
     });
 
     // Botão Sortear Outro (na tela de detalhes)
@@ -106,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
         estado.duracoes.length = 0;
         estado.decadas.length = 0;
         document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
-        document.getElementById("genero-custom").value = "";
         document.getElementById("decada-custom").value = "";
         document.getElementById("results-container").innerHTML =
             `<div class="card mensagem-card" id="description-card">
@@ -161,11 +196,7 @@ function configurarTags(containerId, lista, max, isNumerico) {
 /**
     Mostra os parametros da URL com multiplos valores por chave
 */
-function montarParams({
-    generos,
-    duracoes,
-    decadas
-}) {
+function montarParams({ generos, duracoes, decadas }) {
     const params = new URLSearchParams();
     generos.forEach(g => params.append("generos", g));
     duracoes.forEach(d => params.append("duracoes", d));
@@ -282,15 +313,15 @@ function abrirTelaDetalhes(filme, criteria) {
 
             <div class="notas-container">
                 <div class="nota-box">
-                    <span class="nota-label">⭐ Nota Divina</span>
+                    <span class="nota-label"> Nota Divina(@obladepontokom)</span>
                     <span class="nota-valor">${escapeHtml(filme.notaDivina) || "-"}</span>
                 </div>
                 <div class="nota-box">
-                    <span class="nota-label"> Nota do Público </span>
+                    <span class="nota-label"> Nota do Público</span>
                     <span class="nota-valor">${escapeHtml(filme.notaPublico) || "-"}</span>
                 </div>
                 <div class="nota-box nota-media">
-                    <span class="nota-label"> Média </span>
+                    <span class="nota-label"> Média</span>
                     <span class="nota-valor">${escapeHtml(filme.mediaNotas) || "-"}</span>
                 </div>
             </div>
@@ -302,13 +333,35 @@ function abrirTelaDetalhes(filme, criteria) {
 
             ${filme.motivoRecomendacao ? `
             <div class="motivo-container">
-                <h4>Por que assistir? (Blade Vision)</h4>
+                <h4>Por que assistir? (@obladepontokom)</h4>
                 <p>${escapeHtml(filme.motivoRecomendacao)}</p>
             </div>` : ""}
 
             <div class="plataformas-container">
-                <h4>📺 Onde assistir</h4>
+                <h4>Onde assistir</h4>
                 <div class="plataformas-lista">${plataformas}</div>
+            </div>
+
+            <div class="compartilhar-container">
+                <h4>Compartilhar</h4>
+                <div class="compartilhar-lista">
+                    <a href="https://wa.me/text=${encodeURIComponent(`Olha esse filme que encontrei no Indica Filmes: ${filme.titulo} - ${window.location.href}`)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link whatsapp" title="Compartilhar no WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`Olha esse filme que encontrei no Indica Filmes: ${filme.titulo}')}&url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link twitter" title="Compartilhar no Twitter"></a>
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="compartilhar-link instagram" title="Compartilhar no Instagram" onclick="alert('Copie o link do filme e compartilhe no Instagram: ' + window.location.href + ' - ' + '${escapeHtml(filme.titulo)}'); return false;">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link facebook" title="Compartilhar no Facebook">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </a>
+                </div>
             </div>
 
             <div class="sugerir-container">
@@ -330,9 +383,9 @@ function criarCardResumo(filme) {
     card.classList.add("card", "card-resumo");
 
     const posterUrl = escapeUrl(filme.poster);
-    const miniPoster = filme.poster ?
-        `<img src="${posterUrl}" alt="${escapeHtml(filme.titulo)}" class="poster-mini" />` :
-        "";
+    const miniPoster = filme.poster 
+        ? `<img src="${posterUrl}" alt="${escapeHtml(filme.titulo)}" class="poster-mini" />`
+        : "";
 
     const sinopseText = filme.sinopse ? escapeHtml(filme.sinopse.substring(0, 300)) + (filme.sinopse.length > 300 ? "..." : "") : "";
 
@@ -351,11 +404,7 @@ function criarCardResumo(filme) {
             </div>
         </div>
     `;
-    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || {
-        generos: [],
-        duracoes: [],
-        decadas: []
-    }));
+    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || { generos: [], duracoes: [], decadas: [] }));
     return card;
 }
 

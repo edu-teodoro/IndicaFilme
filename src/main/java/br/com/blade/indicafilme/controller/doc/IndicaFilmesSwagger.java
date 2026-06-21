@@ -35,4 +35,3 @@ import org.springframework.context.annotation.Configuration;
     in = SecuritySchemeIn.HEADER
 )
 public class IndicaFilmesSwagger {}
-

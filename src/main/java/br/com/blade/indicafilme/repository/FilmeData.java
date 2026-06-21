@@ -177,9 +177,9 @@ public class FilmeData {
         }
 
         private static Movie criarFilme(String id, String titulo, String autor,
-                        List<String> generos, Integer duracao, Integer anoLancamento,
-                        String sinopse, Double notaDivina, Double notaPublico,
-                        String motivoRecomendacao, String poster, List<Platform> plataformas) {
+                                        List<String> generos, Integer duracao, Integer anoLancamento,
+                                        String sinopse, Double notaDivina, Double notaPublico,
+                                        String motivoRecomendacao, String poster, List<Platform> plataformas) {
                 Movie m = new Movie();
                 m.setId(id);
                 m.setTitulo(titulo);
