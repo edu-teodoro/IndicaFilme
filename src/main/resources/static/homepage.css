@@ -154,6 +154,12 @@ h1 {
   transition: color 0.18s ease, transform 0.18s ease, text-shadow 0.18s ease;
 }
 
+h1:hover {
+  color: #900020;
+  text-shadow: 4px 4px 14px rgba(0, 0, 0, 0.55);
+  transform: translateY(-3px)
+}
+
 /* Light-mode: brand styling for main title */
 body.light-mode h1 {
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.12);
