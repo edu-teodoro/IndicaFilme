@@ -26,11 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (savedTheme === "light") {
         htmlElement.style.colorScheme = "light";
         document.body.classList.add("light-mode");
-        themeToggle.querySelector(".theme-icon").textContent = "🌞";
+        themeToggle.querySelector(".theme-icon").textContent = "🦇";
     } else {
         htmlElement.style.colorScheme = "dark";
         document.body.classList.remove("light-mode");
-        themeToggle.querySelector(".theme-icon").textContent = "🌜";
+        themeToggle.querySelector(".theme-icon").textContent = "🧛🏽";
     }
 
     // Toggle de tema ao clicar
@@ -41,12 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.classList.remove("light-mode");
             htmlElement.style.colorScheme = "dark";
             localStorage.setItem("theme", "dark");
-            themeToggle.querySelector(".theme-icon").textContent = "🌜";
+            themeToggle.querySelector(".theme-icon").textContent = "🧛🏽";
         } else {
             document.body.classList.add("light-mode");
             htmlElement.style.colorScheme = "light";
             localStorage.setItem("theme", "light");
-            themeToggle.querySelector(".theme-icon").textContent = "🌞";
+            themeToggle.querySelector(".theme-icon").textContent = "🦇";
         }
     });
 
@@ -74,7 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão de sortear
     document.getElementById("sortear-btn").addEventListener("click", async () => {
-        const { generos, duracoes, decadas } = estado;
+        const {
+            generos,
+            duracoes,
+            decadas
+        } = estado;
         const anoDigitado = parseInt(document.getElementById("decada-custom").value);
         let decadasFinais = [...decadas];
         let anoExato = null;
@@ -94,13 +98,22 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        ultimosCriteria = { generos: [...generos], duracoes: [...duracoes], decadas: decadasFinais, anoExato };
+        ultimosCriteria = {
+            generos: [...generos],
+            duracoes: [...duracoes],
+            decadas: decadasFinais,
+            anoExato
+        };
         await sortearFilme(ultimosCriteria);
     });
 
     // Botão Listar
     document.getElementById("listar-btn").addEventListener("click", async () => {
-        const { generos, duracoes, decadas } = estado;
+        const {
+            generos,
+            duracoes,
+            decadas
+        } = estado;
         const anoDigitado = parseInt(document.getElementById("decada-custom").value);
         let decadasFinais = [...decadas];
         let anoExato = null;
@@ -120,7 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        await listarFilmes({ generos: [...generos], duracoes: [...duracoes], decadas: decadasFinais, anoExato });
+        await listarFilmes({
+            generos: [...generos],
+            duracoes: [...duracoes],
+            decadas: decadasFinais,
+            anoExato
+        });
     });
 
     // Botão Sortear Outro (na tela de detalhes)
@@ -162,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gradient = document.getElementById("gradient");
     document.addEventListener("mousemove", (e) => {
         gradient.style.background =
-            `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229,1,43,0.15),#121212 55%)`;
+            `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229,1,43,0.15), #121212 55%)`;
     });
 });
 
@@ -196,7 +214,11 @@ function configurarTags(containerId, lista, max, isNumerico) {
 /**
     Mostra os parametros da URL com multiplos valores por chave
 */
-function montarParams({ generos, duracoes, decadas }) {
+function montarParams({
+    generos,
+    duracoes,
+    decadas
+}) {
     const params = new URLSearchParams();
     generos.forEach(g => params.append("generos", g));
     duracoes.forEach(d => params.append("duracoes", d));
@@ -313,15 +335,15 @@ function abrirTelaDetalhes(filme, criteria) {
 
             <div class="notas-container">
                 <div class="nota-box">
-                    <span class="nota-label"> Nota Divina(@obladepontokom)</span>
+                    <span class="nota-label"> Nota Divina(@obladepontokom) </span>
                     <span class="nota-valor">${escapeHtml(filme.notaDivina) || "-"}</span>
                 </div>
                 <div class="nota-box">
-                    <span class="nota-label"> Nota do Público</span>
+                    <span class="nota-label"> Nota do Público </span>
                     <span class="nota-valor">${escapeHtml(filme.notaPublico) || "-"}</span>
                 </div>
                 <div class="nota-box nota-media">
-                    <span class="nota-label"> Média</span>
+                    <span class="nota-label"> Média </span>
                     <span class="nota-valor">${escapeHtml(filme.mediaNotas) || "-"}</span>
                 </div>
             </div>
@@ -333,23 +355,24 @@ function abrirTelaDetalhes(filme, criteria) {
 
             ${filme.motivoRecomendacao ? `
             <div class="motivo-container">
-                <h4>Por que assistir? (@obladepontokom)</h4>
+                <h4>Por que assistir? (@obladepontokom) </h4>
                 <p>${escapeHtml(filme.motivoRecomendacao)}</p>
             </div>` : ""}
 
             <div class="plataformas-container">
-                <h4>Onde assistir</h4>
+                <h4>Onde assistir?</h4>
                 <div class="plataformas-lista">${plataformas}</div>
             </div>
 
             <div class="compartilhar-container">
                 <h4>Compartilhar</h4>
                 <div class="compartilhar-lista">
-                    <a href="https://wa.me/text=${encodeURIComponent(`Olha esse filme que encontrei no Indica Filmes: ${filme.titulo} - ${window.location.href}`)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link whatsapp" title="Compartilhar no WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/?text=${encodeURIComponent(`Olha esse filme que encontrei no Indica Filmes: ${filme.titulo} - ${window.location.href}`)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link whatsapp" title="Compartilhar no WhatsApp">
+                        <span class="compartilhar-icon>📱</span>
+                    <i class="fab fa-whatsapp"></i>
                         <span>WhatsApp</span>
                     </a>
-                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`Olha esse filme que encontrei no Indica Filmes: ${filme.titulo}')}&url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link twitter" title="Compartilhar no Twitter"></a>
+                    <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`Olha esse filme que encontrei no Indica Filmes: ${filme.titulo}`)}&url=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" class="compartilhar-link twitter" title="Compartilhar no Twitter">
                         <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
                     </a>
@@ -383,28 +406,30 @@ function criarCardResumo(filme) {
     card.classList.add("card", "card-resumo");
 
     const posterUrl = escapeUrl(filme.poster);
-    const miniPoster = filme.poster 
-        ? `<img src="${posterUrl}" alt="${escapeHtml(filme.titulo)}" class="poster-mini" />`
-        : "";
+    const miniPoster = filme.poster ?
+        `<img src="${posterUrl}" alt="${escapeHtml(filme.titulo)}" class="poster-mini" />` : "";
 
     const sinopseText = filme.sinopse ? escapeHtml(filme.sinopse.substring(0, 300)) + (filme.sinopse.length > 300 ? "..." : "") : "";
 
-    card.innerHTML = `
+    card.innerHTML = ` 
         <div class="card-resumo-content">
-            ${miniPoster}
+            ${miniPoster} 
             <div class="card-resumo-info">
-                <h3>${escapeHtml(filme.titulo)} <span class="ano">(${escapeHtml(filme.anoLancamento) || "-"})</span></h3>
-                <p class="generos-resumo">${filme.generos?.map(g => escapeHtml(g)).join(", ") || "-"} . ${filme.duracao ? escapeHtml(filme.duracao) + " min" : "-"}</p>
-                <div class="notas-resumo">
-                    <span> ${escapeHtml(filme.notaDivina) || "-"}</span>
-                    <span> ${escapeHtml(filme.notaPublico) || "-"}</span>
-                    <span> ${escapeHtml(filme.mediaNotas) || "-"}</span>
-                </div>
-                <p class="sinopse-resumo">${sinopseText}</p>
-            </div>
+                <h3>${escapeHtml(filme.titulo)}<span class="ano">(${escapeHtml(filme.anoLancamento) || "-"})</span></h3><p class="generos-resumo">${filme.generos?.map(g => escapeHtml(g)).join(", ") || "-"} . ${filme.duracao ? escapeHtml(filme.duracao) + " min" : "-"}</p> 
+         <div class="notas-resumo">
+            <span>${escapeHtml(filme.notaDivina) || "-"}</span> 
+            <span>${escapeHtml(filme.notaPublico) || "-"}</span>
+            <span>${escapeHtml(filme.mediaNotas) || "-"}</span>
+        </div> 
+        <p class="sinopse-resumo">${sinopseText}</p>
+        </div>
         </div>
     `;
-    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || { generos: [], duracoes: [], decadas: [] }));
+    card.addEventListener("click", () => abrirTelaDetalhes(filme, ultimosCriteria || {
+        generos: [],
+        duracoes: [],
+        decadas: []
+    }));
     return card;
 }
 
@@ -446,8 +471,7 @@ function mostrarMensagem(texto) {
     Mostra mensagem com spinner de loading
 */
 function mostrarLoading(texto) {
-    document.getElementById("results-container").innerHTML = `
-        <div class="card mensagem-card"><div class="spinner"></div><p>${escapeHtml(texto)}</p></div>`;
+    document.getElementById("results-container").innerHTML = `<div class="card mensagem-card"><div class="spinner"></div><p>${escapeHtml(texto)}</p></div>`;
 }
 
 /*

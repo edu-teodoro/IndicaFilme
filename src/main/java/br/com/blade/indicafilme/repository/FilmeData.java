@@ -28,7 +28,7 @@ public class FilmeData {
                                                 "Um grupo de astronautas viaja através de um buraco de minhoca perto de Júpiter para encontrar um novo lar para a humanidade.",
                                                 8.6, 8.6,
                                                 "Uma obra-prima de ficção científica que combina visão ambiciosa com emoção humana, apresentando conceitos complexos de forma acessível.",
-                                                "https://ingresso-a.akamaihd.net/img/cinema/cartaz/4238-cartaz.jpg",
+                                                "https://acdn-us.mitiendanube.com/stores/004/687/740/products/pos-01876-4c8ebd420e08f8359717181254801917-1024-1024.webp",
                                                 List.of(
                                                                 new Platform("HBO Max",
                                                                                 "https://www.hbomax.com/br/pt/movies/interestelar/aa5b9295-8f9c-44f5-809b-3f2b84badfbf?utm_source=universal_search"),

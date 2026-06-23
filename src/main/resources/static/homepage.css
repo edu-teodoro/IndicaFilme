@@ -7,7 +7,7 @@
   --text-primary: #fff;
   --text-secondary: #bbb;
   --text-muted: #888;
-  /* Primary brand red (blood/whine) */
+  /* Primary brand red (blood/wine) */
   --brand-red: #b8002b;
   --accent: var(--brand-red);
   --accent-hover: #7a0018;
@@ -148,19 +148,18 @@ body.light-mode .background-gradient {
 h1 {
   font-family: 'Pieces NFI', 'Arial Black', sans-serif;
   font-size: 8rem;
-  color: var(--text-primary);
+  color: var(--brand-red);
   text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
   width: 100%;
+  transition: color 0.18s ease, transform 0.18s ease, text-shadow 0.18s ease;
 }
 
 /* Light-mode: brand styling for main title */
 body.light-mode h1 {
-    color: var(--brand-red);
     text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.12);
-    transition: color 0.18s ease, transform 0.18s ease, text-shadow 0.18s ease;
 }
 body.light-mode h1:hover {
-  color: #0b0b0b;
+  color: #900020;
   text-shadow: 4px 4px 14px rgba(0, 0, 0, 0.35);
   transform: translateY(-3px);
 }
@@ -414,7 +413,7 @@ body.light-mode .plataforma-link:hover {
   border-bottom: 1px solid var(--border);
 }
 
-.compartilhar-container h4 { 
+.compartilhamento-container h4 { 
   font-size: 1.15rem; 
   color: var(--text-primary); 
   margin-bottom: 16px; 

@@ -7,7 +7,7 @@ Sistema de recomendação e sorteio de filmes com filtros por gênero, duração
 ### Rodar localmente com perfil local
 
 ```powershell
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+mvn spring-boot:run "-Dspring-boot.run.profiles=local"
 ```
 
 A aplicação ficará disponível em `http://localhost:8086`.

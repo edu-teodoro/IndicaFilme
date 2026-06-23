@@ -83,7 +83,7 @@ public class SecurityConfig {
                             "script-src 'self'; " +
                             "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
                             "font-src 'self' https://fonts.gstatic.com; " +
-                            "img-src 'self' https://image.tmdb.org data:; " +
+                            "img-src 'self' https: data:; " +
                             "connect-src 'self'; " +
                             "frame-ancestors 'none'"
                     ));
