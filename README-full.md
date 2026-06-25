@@ -37,7 +37,7 @@ ou
 java -jar target/indica-filmes-1.0.0.jar --spring.profiles.active=local
 ```
 
-A aplicação ficará disponível em `http://localhost:8086`.
+A aplicação ficará disponível em `http://localhost:8099`.
 
 ### Rodar sem perfil local (MongoDB real)
 

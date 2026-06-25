@@ -76,6 +76,10 @@ public class MovieService {
         return movieRepository.findById(id).map(this::enriquecerComTmdb);
     }
 
+    public List<Movie> findAllActive() {
+        return movieRepository.findByStatus(StatusFilme.ATIVO);
+    }
+
     public Optional<Movie> findByTitle(String titulo) {
         return movieRepository.findByTituloIgnoreCase(titulo);
     }

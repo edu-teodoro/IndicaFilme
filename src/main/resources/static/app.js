@@ -150,7 +150,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("voltar-btn").addEventListener("click", () => {
         document.getElementById("tela-detalhes").classList.remove("fade-in");
         document.getElementById("tela-detalhes").style.display = "none";
+        document.getElementById("tela-principal").classList.remove("fade-in");
         document.getElementById("tela-principal").style.display = "block";
+        // Força reflow para sincronizar com CSS animation
+        document.getElementById("tela-principal").offsetHeight;
         document.getElementById("tela-principal").classList.add("fade-in");
     });
 
@@ -182,6 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
         gradient.style.background =
             `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(229,1,43,0.15), #121212 55%)`;
     });
+
+    // Carrega e popula os rolos de filmes nas laterais
+    preencherRolos().catch(err => console.error("Erro ao inicializar rolos:", err));
 });
 
 /**
@@ -431,6 +437,96 @@ function criarCardResumo(filme) {
         decadas: []
     }));
     return card;
+}
+
+/* Carrega todos os filmes disponiveis para popular os rolos */
+async function carregarFilmesParaRolos() {
+    try {
+        const response = await fetch("/api/v1/movies");
+        if (!response.ok) return [];
+        const filmes = await response.json();
+        return Array.isArray(filmes) ? filmes : [];
+    } catch (err) {
+        console.error("Erro ao carregar filmes para rolos:", err);
+        return [];
+    }
+}
+
+/* Embaralha aleatoriamente um array (Fisher-Yates shuffle) */
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; 1 > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[j]];
+    }
+    return shuffled;
+}
+
+/* Preenche os rolos de filmes (direito e esquerdo) com frames animados */
+async function preencherRolos() {
+    let filmes = await carregarFilmesParaRolos();
+    if (filmes.length === 0) return;
+
+    // Embaralha filmes para ordem aleatoria (cada reload diferente)
+    filmes = shuffleArray(filmes);
+    
+    const filmstripLeft = document.getElementById("filmstrip-left");
+    const filmstripRight = document.getElementById("filmstrip-right");
+
+    if (!filmstripLeft || !filmstripRight) return;
+
+    // Divide os filmes em dois grupos (para rolos diferentes)
+    const meio = Math.ceil(filmes.length / 2);
+    const filmesEsquerda = filmes.slice(0, meio);
+    const filmesDireita = filmes.slice(meio);
+
+    // Preenche rolo esquerdo (ordem aleatoria com duplicação para loop continuo)
+    filmesEsquerda.forEach(filme => {
+        criarFrameFilmstrip(filmstripLeft, filme);
+    });
+    // Duplica ~30% dos filmes no final para efeito loop suave e imperceptivel
+    const duplicarLeftQtd = Math.ceil(filmesEsquerda.length * 0.3);
+    filmesEsquerda.slice(0, duplicarLeftQtd).forEach(filme => {
+        criarFrameFilmstrip(filmestripLeft, filme);
+    });
+    // Preenche rolo esquerdo (ordem inversa para movimento oposto)
+    filmesDireita.reverse().forEach(filme => {
+        criarFrameFilmstrip(filmstripRight, filme);
+    });
+    // Duplica ~30% dos filmes no final para efeito loop suave e imperceptivel
+    const duplicarRightQtd = Math.ceil(filmesDireita.length * 0.3);
+    filmesDireita.slice(0, duplicarRightQtd).forEach(filme => {
+        criarFrameFilmstrip(filmstripRight, filme);
+    });
+}
+
+/* Cria um frame individual para o rolo de filmes */
+function criarFrameFilmstrip(container, filme) {
+    const frame = document.createElement("div");
+    frame.classList.add("filmstrip-frame");
+    frame.setAttribute("data-title", escapeHtml(filme.titulo || "Sem título"));
+
+    if (filme.poster) {
+        const img = document.createElement("img");
+        img.src = escapeUrl(filme.poster);
+        img.alt = escapeHtml(filme.titulo || "Sem título");
+        img.onerror = () => {
+            img.style.display = "none";
+            frame.classList.add("no-image");
+            frame.innerHTML = "📽️";
+        };
+        frame.appendChild(img);
+    } else {
+        frame.classList.add("no-image");
+        frame.innerHTML = "📽️";
+    }
+
+    // Clique no frame abre os detalhes do filme
+    frame.addEventListener("click", () => {
+        abrirTelaDetalhes(filme, ultimosCriteria || { generos: [], duracoes: [], decadas: [] });
+    });
+
+    container.appendChild(frame);
 }
 
 /*

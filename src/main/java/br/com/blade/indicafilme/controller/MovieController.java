@@ -78,10 +78,23 @@ public class MovieController {
         log.info("GET /movies -> generos={}, duracoes={}, decadas={}", generos, duracoes, decadas);
         validarDecadas(decadas);
 
-        MovieSearchCriteria criteria = new MovieSearchCriteria(generos, duracoes, decadas);
-        List<MovieDto> resultado = service.filterMovies(criteria).stream()
+        // Se não ha filtros, retorna TODOS os filmes ativos
+        boolean temFiltros = (generos != null && !generos.isEmpty())
+                || (duracoes != null && !duracoes.isEmpty())
+                || (decadas != null && !decadas.isEmpty());
+
+        List<MovieDto> resultado;
+        if (!temFiltros) {
+            // Retorna todos of ilmes para rolos/seleção inicial
+            resultado = service.findAllActive().stream()
                 .map(MovieDto::fromMovie)
                 .toList();
+        } else {
+        MovieSearchCriteria criteria = new MovieSearchCriteria(generos, duracoes, decadas);
+        resultado = service.filterMovies(criteria).stream()
+                .map(MovieDto::fromMovie)
+                .toList();
+        }
 
         return resultado.isEmpty() ? ResponseEntity.ok(LISTA_VAZIA) : ResponseEntity.ok(resultado);
     }
