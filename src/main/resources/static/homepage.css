@@ -20,8 +20,8 @@
 
 @font-face {
   font-family: 'Pieces NFI';
-  src: url('/static/fonts/PiecesNFI.woff2') format('woff2'),
-       url('/static/fonts/PiecesNFI.woff') format('woff');
+  src: url('/fonts/PiecesNFI.woff2') format('woff2'),
+       url('/fonts/PiecesNFI.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: block; 
@@ -143,7 +143,7 @@ body.light-mode .background-gradient {
     transform: rotate(180deg);
 }
 
-.title-container {text-align: left; margin-bottom: 20px; }
+.title-container {text-align: center; margin-bottom: 20px; }
 .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-top: 5px; }
 
 h1 {
@@ -313,7 +313,7 @@ body.light-mode .btn-primario:hover {
   padding: 20px;
   border-radius: var(--radius);
   width: 100%;
-  max-height: 80vh;
+  flex: 1;
   overflow-y: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
@@ -574,6 +574,8 @@ body.light-mode .compartilhar-link:hover {
   gap: 15px;
   width: 100%;
   max-width: 1200px;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .title-container {
@@ -586,6 +588,10 @@ body.light-mode .compartilhar-link:hover {
 .container {
   grid-column: 2;
   grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  overflow:hidden;
+  gap: 15px;
 }
 
 .filmstrip-container.filmstrip-left {
@@ -600,9 +606,10 @@ body.light-mode .compartilhar-link:hover {
 
 .filmstrip-container {
   width: 80px;
-  height: 60px;
+  height: auto;
+  max-height: calc(100vh - 250px);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   background: linear-gradient(180deg, rgba(184, 0, 43, 0.1) 0%, rgba(184, 0, 43, 0.5) 50%,  rgba(184, 0, 43, 0.1) 100%);
   border-radius: 8px;
@@ -624,7 +631,7 @@ body.light-mode .compartilhar-link:hover {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  animation: filmstripScroll 20s linear infinite;
+  animation: filmstripScroll 40s linear infinite;
   padding: 5px 0;
 }
 

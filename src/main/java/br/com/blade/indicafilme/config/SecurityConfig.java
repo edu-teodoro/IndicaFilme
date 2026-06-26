@@ -81,8 +81,8 @@ public class SecurityConfig {
                     headers.contentSecurityPolicy(csp -> csp.policyDirectives(
                             "default-src 'self'; " +
                             "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; " +
-                            "style-src 'self https://fonts.googleapis.com https://cndjs.cloudflare.com 'unsafe-inline'; " +
-                            "font-src 'self' https://fonts.gstatic.com https://cndjs.cloudflare.com data:; " +
+                            "style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; " +
+                            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; " +
                             "img-src 'self' https: data:; " +
                             "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; " +
                             "frame-ancestors 'none'"
