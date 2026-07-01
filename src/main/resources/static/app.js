@@ -16,6 +16,14 @@ const estado = {
 let ultimosCriteria = null;
 
 document.addEventListener("DOMContentLoaded", () => {
+    // CSS Layout Fix
+    const titleContainer = document.querySelector('.title-container');
+    if (titleContainer) titleContainer.style.textAlign = 'center';
+    // Removed height: 100% - containers shoould use CSS height: auto and grow naturally
+    // const filtersContainer = document.querySelector('.filters-container');
+    // if (filtersContainer) filtersContainer.style.height = '100%';
+    // const resultsContainer = document.getElementById('results-container');
+    // if (resultsContainer) resultsContainer.style.height = '100%';
 
     // Theme Toogle (Dark/Light Mode)
     const themeToggle = document.getElementById("theme-toggle");
@@ -148,13 +156,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão voltar
     document.getElementById("voltar-btn").addEventListener("click", () => {
-        document.getElementById("tela-detalhes").classList.remove("fade-in");
-        document.getElementById("tela-detalhes").style.display = "none";
-        document.getElementById("tela-principal").classList.remove("fade-in");
-        document.getElementById("tela-principal").style.display = "block";
+        const telaDetalhes = document.getElementById("tela-detalhes");
+        const telaPrincipal = document.getElementById("tela-principal");
+
+        telaDetalhes.classList.remove("fade-in");
+        telaDetalhes.style.display = "none";
+        telaPrincipal.classList.remove("fade-in");
+        // Restaura o display original definido no CSS (#tela-principal = grid)
+        telaPrincipal.style.removeProperty("display");
         // Força reflow para sincronizar com CSS animation
-        document.getElementById("tela-principal").offsetHeight;
-        document.getElementById("tela-principal").classList.add("fade-in");
+        telaPrincipal.offsetHeight;
+        telaPrincipal.classList.add("fade-in");
     });
 
     // Botão limpar filtros
@@ -298,9 +310,12 @@ async function listarFilmes(criteria) {
     Abre a tela de detalhes completos de um filme sorteado
 */
 function abrirTelaDetalhes(filme, criteria) {
-    document.getElementById("tela-principal").style.display = "none";
+    const telaPrincipal = document.getElementById("tela-principal");
     const telaDetalhes = document.getElementById("tela-detalhes");
-    telaDetalhes.style.display = "block";
+
+    telaPrincipal.style.display = "none";
+    // Remove inline display para usar comportamento default do elemento
+    telaDetalhes.style.removerProperty("display");
     telaDetalhes.classList.add("fade-in");
 
     // Mostra os filtros usados no topo
