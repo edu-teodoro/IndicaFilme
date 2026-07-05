@@ -315,7 +315,7 @@ function abrirTelaDetalhes(filme, criteria) {
 
     telaPrincipal.style.display = "none";
     // Remove inline display para usar comportamento default do elemento
-    telaDetalhes.style.removerProperty("display");
+    telaDetalhes.style.removeProperty("display");
     telaDetalhes.classList.add("fade-in");
 
     // Mostra os filtros usados no topo
