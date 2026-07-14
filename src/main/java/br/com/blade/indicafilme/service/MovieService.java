@@ -5,15 +5,18 @@ import br.com.blade.indicafilme.exception.BadRequestException;
 import br.com.blade.indicafilme.exception.NotFoundException;
 import br.com.blade.indicafilme.model.Movie;
 import br.com.blade.indicafilme.model.StatusFilme;
+import br.com.blade.indicafilme.repository.InMemoryMovieRepository;
 import br.com.blade.indicafilme.repository.MovieRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 public class MovieService {
@@ -22,12 +25,19 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final TmdbService tmdbService;
+    private final InMemoryMovieRepository fallbackRepository = new InMemoryMovieRepository();
+    private final boolean localFallbackEnabled;
     private final SecureRandom random = new SecureRandom();
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, TmdbService tmdbService) {
+    public MovieService(
+            MovieRepository movieRepository,
+            TmdbService tmdbService,
+            @Value("${app.fallback.local-enabled:false}") boolean localFallbackEnabled
+            ) {
         this.movieRepository = movieRepository;
         this.tmdbService = tmdbService;
+        this.localFallbackEnabled = localFallbackEnabled;
     }
 
     public List<Movie> filterMovies(MovieSearchCriteria filtro) {
@@ -39,7 +49,13 @@ public class MovieService {
             throw new BadRequestException("Ao menos um filtro deve ser informado.");
         }
 
-        List<Movie> resultado = movieRepository.findByStatus(StatusFilme.ATIVO).stream()
+        List<Movie> ativos = withMongoFallback(
+                () -> movieRepository.findByStatus(StatusFilme.ATIVO),
+                () -> fallbackRepository.findByStatus(StatusFilme.ATIVO),
+                "findByStatus"
+        );
+
+        List<Movie> resultado = ativos.stream()
                 .filter(f -> estaVazio(filtro.generos()) || matchGenero(f, filtro.generos()))
                 .filter(f -> estaVazio(filtro.duracoes()) || matchDuracao(f, filtro.duracoes()))
                 .filter(f -> estaVazio(filtro.decadas()) || matchDecada(f, filtro.decadas()))
@@ -73,15 +89,27 @@ public class MovieService {
     }
 
     public Optional<Movie> findById(String id) {
-        return movieRepository.findById(id).map(this::enriquecerComTmdb);
+        return withMongoFallback(
+                () -> movieRepository.findById(id),
+                () -> fallbackRepository.findById(id),
+                "findById"
+        ).map(this::enriquecerComTmdb);
     }
 
     public List<Movie> findAllActive() {
-        return movieRepository.findByStatus(StatusFilme.ATIVO);
+        return withMongoFallback(
+                () -> movieRepository.findByStatus(StatusFilme.ATIVO),
+                () -> fallbackRepository.findByStatus(StatusFilme.ATIVO),
+                "findAllActive"
+        );
     }
 
     public Optional<Movie> findByTitle(String titulo) {
-        return movieRepository.findByTituloIgnoreCase(titulo);
+        return withMongoFallback(
+                () -> movieRepository.findByTituloIgnoreCase(titulo),
+                () -> fallbackRepository.findByTituloIgnoreCase(titulo),
+                "findByTitle"
+        );
     }
 
     public Movie enriquecerComTmdb(Movie filme) {
@@ -136,5 +164,18 @@ public class MovieService {
 
     private boolean estaVazio(List<?> lista) {
         return lista == null || lista.isEmpty();
+    }
+
+    private <T> T withMongoFallback(Supplier<T> mongoCall, Supplier<T> fallbackCall, String operation) {
+        try {
+            return mongoCall.get();
+        } catch (Exception ex) {
+            if (!localFallbackEnabled) {
+                log.error("Falha no Mongo durante {}. Fallback local em memória desativado. Motivo: {}", operation, ex);
+                throw ex;
+            }
+            log.warn("Falha no Mongo durante {}. Ativando fallback local em memória. Motivo: {}", operation, ex.getMessage());
+            return fallbackCall.get();
+        }
     }
 }
