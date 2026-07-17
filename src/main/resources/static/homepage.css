@@ -317,6 +317,13 @@ body.light-mode .btn-primario:hover {
 }
 .results-container:hover { transform: scale(1.01); }
 
+/* Modo lista: container com rolagem interna */
+.results-container.modo-lista {
+    max-height: 500px;          /* ajuste conforme necessário */
+    overflow-y: auto;
+    padding-right: 10px;        /* evitar que a barra de rolagem sobreponha o conteúdo */
+}
+
 /* Light Mode: Enhanced Results Container */
 body.light-mode .results-container {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -824,6 +831,7 @@ footer { text-align: center; padding: 30px 20px; color: #555; font-size: 0.8rem;
   h1 { font-size: clamp(2.6rem, 10vw, 3.8rem); margin-bottom: 20px; }
   .title-container { margin-bottom: 20px; }
   .container { grid-template-columns: 1fr; margin-bottom: 40px; }
+  .results-container.modo-lista { max-height: 350px; }
   .botoes-container { flex-direction: column; }
   .detalhes-filtros { flex-direction: column; align-items: flex-start; }
   .detalhes-botoes { width: 100%; }
