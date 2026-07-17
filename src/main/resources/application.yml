@@ -19,6 +19,8 @@ server:
 logging:
   level:
     br.com.blade.indicafilme: ${LOG_LEVEL:INFO}
+    org.mongodb.driver: INFO
+    org.springframework.data.mongodb: INFO
 
 springdoc:
   api-docs:
@@ -26,7 +28,7 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
-    enabled: ${SWAGGER_ENABLED:false}
+    enabled: ${SWAGGER_ENABLED:true}
 
 tmdb:
   api-key: ${TMDB_API_KEY:}
@@ -51,4 +53,3 @@ management:
   endpoint:
     health:
       show-details: never
-      

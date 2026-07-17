@@ -156,32 +156,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão voltar
     document.getElementById("voltar-btn").addEventListener("click", () => {
-        const telaDetalhes = document.getElementById("tela-detalhes");
-        const telaPrincipal = document.getElementById("tela-principal");
+            const telaDetalhes = document.getElementById("tela-detalhes");
+            const telaPrincipal = document.getElementById("tela-principal");
 
-        telaDetalhes.classList.remove("fade-in");
-        telaDetalhes.style.display = "none";
-        telaPrincipal.classList.remove("fade-in");
-        // Restaura o display original definido no CSS (#tela-principal = grid)
-        telaPrincipal.style.removeProperty("display");
-        // Força reflow para sincronizar com CSS animation
-        telaPrincipal.offsetHeight;
-        telaPrincipal.classList.add("fade-in");
-    });
+            telaDetalhes.classList.remove("fade-in");
+            telaDetalhes.style.display = "none";
+            telaPrincipal.classList.remove("fade-in");
+            // Restaura o display original definido no CSS (#tela-principal = grid)
+            telaPrincipal.style.removeProperty("display");
+            // Força reflow para sincronizar com CSS animation
+            telaPrincipal.offsetHeight;
+            telaPrincipal.classList.add("fade-in");
+
+            // Remove a classe de modo lista do container de resultados
+            const container = document.getElementById("results-container");
+            if (container) container.classList.remove("modo-lista");
+        });
 
     // Botão limpar filtros
-    document.getElementById("limpar-btn").addEventListener("click", () => {
-        estado.generos.length = 0;
-        estado.duracoes.length = 0;
-        estado.decadas.length = 0;
-        document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
-        document.getElementById("decada-custom").value = "";
-        document.getElementById("results-container").innerHTML =
-            `<div class="card mensagem-card" id="description-card">
-                <h3>Seu próximo filme está aqui 🎬</h3>
-                <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
-            </div>`;
-    });
+     document.getElementById("limpar-btn").addEventListener("click", () => {
+            estado.generos.length = 0;
+            estado.duracoes.length = 0;
+            estado.decadas.length = 0;
+            document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
+            document.getElementById("decada-custom").value = "";
+            const container = document.getElementById("results-container");
+            container.classList.remove("modo-lista");
+            container.innerHTML =
+                `<div class="card mensagem-card" id="description-card">
+                    <h3>Seu próximo filme está aqui 🎬</h3>
+                    <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
+                </div>`;
+        });
 
     // Footer com ano dinâmico
     const anoAtual = new Date().getFullYear();
@@ -200,6 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Carrega e popula os rolos de filmes nas laterais
     preencherRolos().catch(err => console.error("Erro ao inicializar rolos:", err));
+
+    const container = document.getElementById("results-container");
+    if (container) container.classList.remove("modo-lista");
 });
 
 /**
@@ -298,6 +307,7 @@ async function listarFilmes(criteria) {
         const container = document.getElementById("results-container");
         container.innerHTML = `<h3 class="lista-titulo">${dados.length} filme(s) encontrado(s):</h3>`;
         dados.forEach(filme => container.appendChild(criarCardResumo(filme)));
+        container.classList.add("modo-lista");
     } catch (err) {
         console.error(err);
         mostrarMensagem("Erro ao conectar com servidor. Por favor, tente novamente.");
@@ -796,6 +806,7 @@ function escapeUrl(url) {
 */
 function mostrarMensagem(texto) {
     const container = document.getElementById("results-container");
+    container.classList.remove("modo-lista");
     const card = document.createElement("div");
     card.classList.add("card", "mensagem-card");
     const p = document.createElement("p");
@@ -809,7 +820,9 @@ function mostrarMensagem(texto) {
     Mostra mensagem com spinner de loading
 */
 function mostrarLoading(texto) {
-    document.getElementById("results-container").innerHTML = `<div class="card mensagem-card"><div class="spinner"></div><p>${escapeHtml(texto)}</p></div>`;
+    const container = document.getElementById("results-container");
+    container.classList.remove("modo-lista");
+    container.innerHTML = `<div class="card mensagem-card"><div class="spinner"></div><p>${escapeHtml(texto)}</p></div>`;
 }
 
 /*
