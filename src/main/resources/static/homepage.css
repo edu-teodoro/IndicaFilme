@@ -313,15 +313,14 @@ body.light-mode .btn-primario:hover {
   overflow: visible;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   align-self: stretch;
-  min-height: auto;
+  min-height: 0;               /* evita que o grid "estoure" com scroll interno */
 }
-.results-container:hover { transform: scale(1.01); }
+.results-container:hover { transform: none; }
 
 /* Modo lista: container com rolagem interna */
 .results-container.modo-lista {
     max-height: 500px;          /* ajuste conforme necessário */
-    overflow-y: auto;
-    padding-right: 10px;        /* evitar que a barra de rolagem sobreponha o conteúdo */
+    overflow-y: auto;           /* scroll apenas quando conteúdo exceder max-height */
 }
 
 /* Light Mode: Enhanced Results Container */
@@ -817,6 +816,39 @@ footer { text-align: center; padding: 30px 20px; color: #555; font-size: 0.8rem;
 /* A11y */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
 
+/* ========= SCROLLBAR CUSTOMIZADA ========= */
+/* Firefox */
+.results-container.modo-lista,
+.results-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-hover) transparent;
+}
+
+/* Webkit (Chrome, Edge, Safari) */
+.results-container.modo-lista::-webkit-scrollbar,
+.results-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.results-container.modo-lista::-webkit-scrollbar-track,
+.results-container::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.results-container.modo-lista::-webkit-scrollbar-thumb,
+.results-container::-webkit-scrollbar-thumb {
+  background-color: var(--border-hover);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.results-container.modo-lista::-webkit-scrollbar-thumb:hover,
+.results-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent);
+}
+
 /* ========= RESPONSIVENESS ========= */
 
 /* Tablet Landscape (769-1024px) */
@@ -831,7 +863,7 @@ footer { text-align: center; padding: 30px 20px; color: #555; font-size: 0.8rem;
   h1 { font-size: clamp(2.6rem, 10vw, 3.8rem); margin-bottom: 20px; }
   .title-container { margin-bottom: 20px; }
   .container { grid-template-columns: 1fr; margin-bottom: 40px; }
-  .results-container.modo-lista { max-height: 350px; }
+  .results-container.modo-lista { max-height: 350px; overflow-y: auto; }
   .botoes-container { flex-direction: column; }
   .detalhes-filtros { flex-direction: column; align-items: flex-start; }
   .detalhes-botoes { width: 100%; }
@@ -848,7 +880,7 @@ footer { text-align: center; padding: 30px 20px; color: #555; font-size: 0.8rem;
   h1 { font-size: clamp(2.2rem, 11vw, 3rem); }
   .subtitle { font-size: 0.95rem; }
   .filters-container { padding: 20px; gap: 15px; }
-  .results-container { padding: 15px; max-height: none; }
+  .results-container { padding: 15px; max-height: 350px; overflow-y: auto; }
   .results-container:hover { transform: none; }
   .card { padding: 15px; }
   .card:hover { transform: none; }
