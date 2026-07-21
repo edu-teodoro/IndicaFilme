@@ -10,7 +10,7 @@ spring:
         period: 86400
 
 server:
-  port: 8080
+  port: 1533
   compression:
     enabled: true
     min-response-size: 1024
