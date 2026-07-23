@@ -215,10 +215,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("results-container");
     if (container) container.classList.remove("modo-lista");
 
-    initMobilePanel();
+    initMobilePanels();
     initFilterGroupPanels();
     applyMobilePanelState();
-    window.addEventListener("resize", applyMobilePanelsState);
+    window.addEventListener("resize", applyMobilePanelState);
 });
 
 function isMobileView() {
