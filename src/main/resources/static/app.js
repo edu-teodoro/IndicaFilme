@@ -14,6 +14,8 @@ const estado = {
 
 // Filtros ativos no momento do ultimo sorteio (para "Sortear Outro")
 let ultimosCriteria = null;
+const MOBILE_BREAKPOINT = 768;
+let wasMobileView = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     // CSS Layout Fix
@@ -172,6 +174,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const container = document.getElementById("results-container");
         if (container) container.classList.remove("modo-lista");
         mostrarMensagemPadrao();
+        if (isMobileView()) {
+            setContainerExpanded("filters", true);
+            setContainerExpanded("results", false);
+        }
     });
 
     // Botão limpar filtros
@@ -182,6 +188,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
         document.getElementById("decada-custom").value = "";
         mostrarMensagemPadrao();
+        if (isMobileView()) {
+            setContainerExpanded("filters", true);
+            setContainerExpanded("results", false);
+        }
     });
 
     // Footer com ano dinâmico
@@ -204,7 +214,155 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const container = document.getElementById("results-container");
     if (container) container.classList.remove("modo-lista");
+
+    initMobilePanel();
+    initFilterGroupPanels();
+    applyMobilePanelState();
+    window.addEventListener("resize", applyMobilePanelsState);
 });
+
+function isMobileView() {
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+}
+
+function getResultsContent() {
+    return document.getElementById("results-content") || document.getElementById("results-container");
+}
+
+function getPanelRefs(panel) {
+    if (panel === "filters") {
+        return {
+            container: document.getElementById("filters-container"),
+            toggle: document.getElementById ("toggle-filters-btn")
+        };
+    }
+
+    if (panel === "results") {
+        return {
+            container: document.getElementById("results-container"),
+            toggle: document.getElementById ("toggle-results-btn")
+        };
+    }
+
+    return {
+        container: null,
+        toggle: null
+    };
+}
+
+function setContainerExpanded(panel, expanded) {
+    const { container, toggle } = getPanelRefs(panel);
+    if (!container || !toggle) return;
+
+    container.classList.toggle("is-collapsed", !expanded);
+    toggle.setAttribute("aria-expanded", String(expanded));
+}
+
+function toggleContainer(panel) {
+    const { container, toggle } = getPanelRefs(panel);
+    if (!container || !toggle) return;
+    
+    const currentlyExpanded = toggle.getAttribute("aria-expanded") === "true";
+    const nextExpanded = !currentlyExpanded;
+    setContainerExpanded(panel, nextExpanded);
+
+    // Mobile UX: ao recolher resultados manualmente, reabre filtros para facilitar nova busca.
+    if (panel === "results" && !nextExpanded && isMobileView()) {
+        setContainerExpanded("filters", true);
+    }
+}
+
+function initMobilePanels() {
+    const filtersToggle = document.getElementById("toggle-filters-btn");
+    const resultsToggle = document.getElementById("toggle-results-btn");
+
+    if (filtersToggle) {
+        filtersToggle.addEventListener("click", () => toggleContainer("filters"));
+    }
+
+    if (resultsToggle) {
+        resultsToggle.addEventListener("click", () => toggleContainer("results"));
+    }
+}
+
+function getFilterGroupRefs(group) {
+    if (group === "generos") {
+        return {
+            container: document.getElementById("group-generos"),
+            toggle: document.getElementById ("toggle-generos-btn")
+        };
+    }
+
+    if (group === "duracoes") {
+        return {
+            container: document.getElementById("group-duracoes"),
+            toggle: document.getElementById ("toggle-duracoes-btn")
+        };
+    }
+
+    if (group === "decadas") {
+        return {
+            container: document.getElementById("group-decadas"),
+            toggle: document.getElementById ("toggle-decadas-btn")
+        };
+    }
+
+    return {
+        container: null,
+        toggle: null
+    };
+}
+
+function setFilterGroupExpanded(group, expanded) {
+    const { container, toggle } = getFilterGroupRefs(group);
+    if (!container || !toggle) return;
+
+    container.classList.toggle("is-collapsed", !expanded);
+    toggle.setAttribute("aria-expanded", String(expanded));
+}
+
+function toggleFilterGroup(group) {
+    const { toggle } = getFilterGroupRefs(group);
+    if (!toggle) return;
+
+    const currentlyExpanded = toggle.getAttribute("aria-expanded") === "true";
+    setFilterGroupExpanded(group, !currentlyExpanded);
+}
+
+function setAllFilterGroupsExpanded(expanded) {
+    setFilterGroupExpanded("generos", expanded);
+    setFilterGroupExpanded("duracoes", expanded);
+    setFilterGroupExpanded("decadas", expanded);
+}
+
+function initFilterGroupPanels() {
+    const groups = ["generos","duracoes","decadas"];
+
+    groups.forEach(group => {
+        const { toggle } = getFilterGroupRefs(group);
+        if (!toggle) return;
+
+        toggle.addEventListener("click", () => toggleFilterGroup(group));
+    });
+}
+
+function applyMobilePanelState() {
+    const mobile = isMobileView();
+    if (wasMobileView === mobile) return;
+
+    wasMobileView = mobile;
+
+    if (mobile) {
+        setContainerExpanded("filters", true);
+        setContainerExpanded("results", false);
+        setAllFilterGroupsExpanded(true);
+        return;
+    }
+
+    setContainerExpanded("filters", true);
+    setContainerExpanded("results", true);
+    setAllFilterGroupsExpanded(true);
+}
 
 /**
 Configura o comportamento de clique nas tags de filtro
@@ -300,9 +458,17 @@ async function listarFilmes(criteria) {
         }
 
         const container = document.getElementById("results-container");
-        container.innerHTML = `<h3 class="lista-titulo">${dados.length} filme(s) encontrado(s):</h3>`;
+        const content = getResultsContent();
+        if (!container || !content) return;
+
+        content.innerHTML = `<h3 class="lista-titulo">${dados.length} filme(s) encontrado(s):</h3>`;
         dados.forEach(filme => container.appendChild(criarCardResumo(filme)));
         container.classList.add("modo-lista");
+
+        if (isMobileView()) {
+            setContainerExpanded("filters", false);
+            setContainerExpanded("results", true);
+        }
     } catch (err) {
         console.error(err);
         mostrarMensagem("Erro ao conectar com servidor. Por favor, tente novamente.");
@@ -804,22 +970,31 @@ function escapeUrl(url) {
 */
 function mostrarMensagem(texto) {
     const container = document.getElementById("results-container");
+    const content = getResultsContent();
+    if (!content) return;
+
     container.classList.remove("modo-lista");
     const card = document.createElement("div");
     card.classList.add("card", "mensagem-card");
     const p = document.createElement("p");
     p.textContent = texto;
     card.appendChild(p);
-    container.innerHTML = "";
-    container.appendChild(card);
+    content.innerHTML = "";
+    content.appendChild(card);
+
+    if (isMobileView()) {
+        setContainerExpanded("results", true);
+    }
 }
 
 /* Restaura a mensagem padrão do painel de resultados */
 function mostrarMensagemPadrao() {
     const container = document.getElementById("results-container");
-    if (!container) return;
+    const content = getResultsContent();
+    if (!container || !content) return;
+
     container.classList.remove("modo-lista");
-    container.innerHTML =
+    content.innerHTML =
     `<div class="card mensagem-card" id="description-card">
         <h3>Seu próximo filme está aqui 🎬</h3>
         <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
@@ -831,8 +1006,15 @@ function mostrarMensagemPadrao() {
 */
 function mostrarLoading(texto) {
     const container = document.getElementById("results-container");
+    const content = getResultsContent();
+    if (!content) return;
+
     container.classList.remove("modo-lista");
-    container.innerHTML = `<div class="card mensagem-card"><div class="spinner"></div><p>${escapeHtml(texto)}</p></div>`;
+    content.innerHTML = `<div class="card mensagem-card"><div class="spinner"></div><p>${escapeHtml(texto)}</p></div>`;
+
+    if (isMobileView()) {
+        setContainerExpanded("results", true);
+    }
 }
 
 /*
