@@ -7,11 +7,9 @@
     <option name="selectedModelId" value="auto" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c1aea36-755c-4ac4-a751-4c416c130363" name="Changes" comment="Adição de Services">
+    <list default="true" id="5c1aea36-755c-4ac4-a751-4c416c130363" name="Changes" comment="fix: barra de rolagem na tela principal">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/homepage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/homepage.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,7 +265,23 @@
       <option name="project" value="LOCAL" />
       <updated>1784031055917</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix: barra de rolagem na tela principal">
+      <option name="closed" value="true" />
+      <created>1784316091928</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1784316091928</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix: barra de rolagem na tela principal">
+      <option name="closed" value="true" />
+      <created>1784592495729</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1784592495729</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -300,7 +314,8 @@
     <MESSAGE value="Adição tmdbProperties" />
     <MESSAGE value="Adição de Services" />
     <MESSAGE value="vamo ver se funfa" />
-    <option name="LAST_COMMIT_MESSAGE" value="vamo ver se funfa" />
+    <MESSAGE value="fix: barra de rolagem na tela principal" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: barra de rolagem na tela principal" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

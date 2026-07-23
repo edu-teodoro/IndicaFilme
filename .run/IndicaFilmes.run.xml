@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="IndicaFilmes" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="ADMIN_API_KEY" value="1234566" />
+      <env name="CORS_ORIGINS" value="" />
+      <env name="LOCAL_FALLBACK_ENABLED" value="false" />
+      <env name="MONGODB_URI" value="mongodb+srv://Blade:basquete15@bladeindica.lhazjyp.mongodb.net/indicafilmes?appName=BladeIndica" />
+    </envs>
+    <module name="indica-filmes" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="br.com.blade.indicafilme.IndicaFilmesApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

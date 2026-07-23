@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: indica-filmes
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: ADMIN_API_KEY
+        sync: false
+      - key: LOCAL_FALLBACK_ENABLED
+        value: "false"
+      - key: SWAGGER_ENABLED
+        value: "false"
+      - key: LOG_LEVEL
+        value: "DEBUG"
+      - key: CORS_ORIGINS
+        sync: false
+      - key: TMDB_API_KEY
+        sync: false
