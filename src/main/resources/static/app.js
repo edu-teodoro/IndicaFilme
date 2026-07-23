@@ -156,38 +156,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Botão voltar
     document.getElementById("voltar-btn").addEventListener("click", () => {
-            const telaDetalhes = document.getElementById("tela-detalhes");
-            const telaPrincipal = document.getElementById("tela-principal");
+        const telaDetalhes = document.getElementById("tela-detalhes");
+        const telaPrincipal = document.getElementById("tela-principal");
 
-            telaDetalhes.classList.remove("fade-in");
-            telaDetalhes.style.display = "none";
-            telaPrincipal.classList.remove("fade-in");
-            // Restaura o display original definido no CSS (#tela-principal = grid)
-            telaPrincipal.style.removeProperty("display");
-            // Força reflow para sincronizar com CSS animation
-            telaPrincipal.offsetHeight;
-            telaPrincipal.classList.add("fade-in");
+        telaDetalhes.classList.remove("fade-in");
+        telaDetalhes.style.display = "none";
+        telaPrincipal.classList.remove("fade-in");
+        // Restaura o display original definido no CSS (#tela-principal = grid)
+        telaPrincipal.style.removeProperty("display");
+        // Força reflow para sincronizar com CSS animation
+        telaPrincipal.offsetHeight;
+        telaPrincipal.classList.add("fade-in");
 
-            // Remove a classe de modo lista do container de resultados
-            const container = document.getElementById("results-container");
-            if (container) container.classList.remove("modo-lista");
-        });
+        // Remove a classe de modo lista do container de resultados
+        const container = document.getElementById("results-container");
+        if (container) container.classList.remove("modo-lista");
+        mostrarMensagemPadrao();
+    });
 
     // Botão limpar filtros
-     document.getElementById("limpar-btn").addEventListener("click", () => {
-            estado.generos.length = 0;
-            estado.duracoes.length = 0;
-            estado.decadas.length = 0;
-            document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
-            document.getElementById("decada-custom").value = "";
-            const container = document.getElementById("results-container");
-            container.classList.remove("modo-lista");
-            container.innerHTML =
-                `<div class="card mensagem-card" id="description-card">
-                    <h3>Seu próximo filme está aqui 🎬</h3>
-                    <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
-                </div>`;
-        });
+    document.getElementById("limpar-btn").addEventListener("click", () => {
+        estado.generos.length = 0;
+        estado.duracoes.length = 0;
+        estado.decadas.length = 0;
+        document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
+        document.getElementById("decada-custom").value = "";
+        mostrarMensagemPadrao();
+    });
 
     // Footer com ano dinâmico
     const anoAtual = new Date().getFullYear();
@@ -470,7 +465,7 @@ async function carregarFilmesParaRolos() {
         const response = await fetch("/api/v1/movies");
         if (!response.ok) {
             console.warn("API /api/v1/movies retornou erro, usando fallback de FilmeData");
-            return obterFilmesPadraoFilmeData();            
+            return obterFilmesPadraoFilmeData();
         }
         const filmes = await response.json();
 
@@ -491,12 +486,11 @@ async function carregarFilmesParaRolos() {
     Usados quando a API retorna lista vazia ou há erro de conexão
 */
 function obterFilmesPadraoFilme() {
-    const filmesPadrao = [
-        {
-            id:"1",
-            titulo: "Senhor dos Anéis: A Comunidade do Anel", 
+    const filmesPadrao = [{
+            id: "1",
+            titulo: "Senhor dos Anéis: A Comunidade do Anel",
             autor: "Peter Jackson",
-            generos: ["Fantasia", "Aventura", "Drama"], 
+            generos: ["Fantasia", "Aventura", "Drama"],
             duracao: 208,
             anoLancamento: 2001,
             sinopse: "Um hobbit despretensiosos encontra um anel invisível e aprende que deve lutar contra o poderoso senhor dos anéis.",
@@ -506,199 +500,199 @@ function obterFilmesPadraoFilme() {
             poster: "https://br.web.img3.acsta.net/medias/nmedia/18/92/91/32/20224832.jpg"
         },
         {
-           id: "2",
-           titulo: "Interestelar",
-           autor: "Christopher Nolan",
-           generos: ["Ficção Científica", "Drama", "Aventura"],
-           duracao: 169,
-           anoLancamento: 2014,
-           sinopse: "Um grupo de astronautas viaja através de um buraco de minhoca perto de Júpiter para encontrar um novo lar para a humanidade.",
-           notaDivina: 8.6,
-           notaPublico: 8.6,
-           motivoRecomendacao: "Uma obra-prima de ficção científica que combina visão ambiciosa com emoção humana, apresentando conceitos complexos de forma acessível.",
-           poster: "https://acdn-us.mitiendanube.com/stores/004/687/740/products/pos-01876-4c8ebd420e08f8359717181254801917-1024-1024.webp"                      
+            id: "2",
+            titulo: "Interestelar",
+            autor: "Christopher Nolan",
+            generos: ["Ficção Científica", "Drama", "Aventura"],
+            duracao: 169,
+            anoLancamento: 2014,
+            sinopse: "Um grupo de astronautas viaja através de um buraco de minhoca perto de Júpiter para encontrar um novo lar para a humanidade.",
+            notaDivina: 8.6,
+            notaPublico: 8.6,
+            motivoRecomendacao: "Uma obra-prima de ficção científica que combina visão ambiciosa com emoção humana, apresentando conceitos complexos de forma acessível.",
+            poster: "https://acdn-us.mitiendanube.com/stores/004/687/740/products/pos-01876-4c8ebd420e08f8359717181254801917-1024-1024.webp"
         },
         {
-           id: "3", 
-           titulo: "Parasita",
-           autor: "Bong Joon-ho",
-           generos: ["Drama", "Thriller"],
-           duracao: 132,
-           anoLancamento: 2019,
-           sinopse: "A família Kim, de baixa renda, planeja uma operação para se infiltrar na residência de uma família rica.",
-           notaDivina: 8.6,
-           notaPublico: 8.5,
-           motivoRecomendacao: "Um filme brilhantemente executado que mistura humor, drama e comentário social, com uma narrativa que mantém você na beira do assento.",
-           poster: "https://image.tmdb.org/t/p/w600_and_h900_bestv2/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"                                                
+            id: "3",
+            titulo: "Parasita",
+            autor: "Bong Joon-ho",
+            generos: ["Drama", "Thriller"],
+            duracao: 132,
+            anoLancamento: 2019,
+            sinopse: "A família Kim, de baixa renda, planeja uma operação para se infiltrar na residência de uma família rica.",
+            notaDivina: 8.6,
+            notaPublico: 8.5,
+            motivoRecomendacao: "Um filme brilhantemente executado que mistura humor, drama e comentário social, com uma narrativa que mantém você na beira do assento.",
+            poster: "https://image.tmdb.org/t/p/w600_and_h900_bestv2/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg"
         },
         {
-          id:  "4",
-          titulo: "De Volta para o Futuro",
-          autor: "Robert Zemeckis",
-          generos: ["Ficção Científica", "Comédia", "Aventura"],
-          duracao: 116,
-          anoLancamento: 1985,
-          sinopse: "Um adolescente é acidentalmente enviado ao passado em uma máquina do tempo e deve garantir que seus pais se apaixonem para que ele exista.",
-          notaDivina: 8.5,
-          notaPublico: 8.5,
-          motivoRecomendacao: "Um clássico atemporal que combina humor, ação e uma história de viagem no tempo perfeitamente executada, com personagens memoráveis.",
-          poster: "https://m.media-amazon.com/images/M/MV5BZDcyNmYxN2QtMmViZS00NTQ4LTlhZTAtZjc4MzY2Yjg0M2ZmXkEyXkFqcGc@._V1_.jpg"
+            id: "4",
+            titulo: "De Volta para o Futuro",
+            autor: "Robert Zemeckis",
+            generos: ["Ficção Científica", "Comédia", "Aventura"],
+            duracao: 116,
+            anoLancamento: 1985,
+            sinopse: "Um adolescente é acidentalmente enviado ao passado em uma máquina do tempo e deve garantir que seus pais se apaixonem para que ele exista.",
+            notaDivina: 8.5,
+            notaPublico: 8.5,
+            motivoRecomendacao: "Um clássico atemporal que combina humor, ação e uma história de viagem no tempo perfeitamente executada, com personagens memoráveis.",
+            poster: "https://m.media-amazon.com/images/M/MV5BZDcyNmYxN2QtMmViZS00NTQ4LTlhZTAtZjc4MzY2Yjg0M2ZmXkEyXkFqcGc@._V1_.jpg"
         },
         {
-          id: "5",
-          titulo: "Clube da Luta",
-          autor:  "David Fincher",
-          generos:["Drama", "Thriller"],
-          duracao: 139,
-          anoLancamento: 1999,
-          sinopse: "Um insomne contador conhece um vendedor de sabão carismático, e ambos formam um clube secreto de luta que evolui em algo muito mais sombrio.",
-          notaDivina: 8.8,
-          notaPublico: 8.8,
-          motivoRecomendacao: "Um thriller psicológico visceral e inovador que permanece relevante e impactante, com uma reviravolta final memorável.",
-          poster: "https://m.media-amazon.com/images/I/61vKJHwfCUL._AC_UF894,1000_QL80_.jpg"
+            id: "5",
+            titulo: "Clube da Luta",
+            autor: "David Fincher",
+            generos: ["Drama", "Thriller"],
+            duracao: 139,
+            anoLancamento: 1999,
+            sinopse: "Um insomne contador conhece um vendedor de sabão carismático, e ambos formam um clube secreto de luta que evolui em algo muito mais sombrio.",
+            notaDivina: 8.8,
+            notaPublico: 8.8,
+            motivoRecomendacao: "Um thriller psicológico visceral e inovador que permanece relevante e impactante, com uma reviravolta final memorável.",
+            poster: "https://m.media-amazon.com/images/I/61vKJHwfCUL._AC_UF894,1000_QL80_.jpg"
         },
         {
-          id: "6",
-          titulo: "Whiplash",
-          autor: "Damien Chazelle",
-          generos: ["Drama", "Música"],
-          duracao: 107,
-          anoLancamento: 2014,
-          sinpose: "Um baterista ambicioso num colégio de artes recebe a atenção de um regente abusivo que o coloca em um jogo perturbador de desempenho.",
-          notaDivina: 8.5,
-          notaPublico: 8.5,
-          motivoRecomendacao: "Um drama intenso e angustiante sobre obsessão e excelência, com cenas de músicas incríveis e uma tensão praticamente insuportável.",
-          poster: "https://rollingstone.com.br/wp-content/uploads/legacy/2014/img-1026474-whiplash-poster.jpg"
+            id: "6",
+            titulo: "Whiplash",
+            autor: "Damien Chazelle",
+            generos: ["Drama", "Música"],
+            duracao: 107,
+            anoLancamento: 2014,
+            sinpose: "Um baterista ambicioso num colégio de artes recebe a atenção de um regente abusivo que o coloca em um jogo perturbador de desempenho.",
+            notaDivina: 8.5,
+            notaPublico: 8.5,
+            motivoRecomendacao: "Um drama intenso e angustiante sobre obsessão e excelência, com cenas de músicas incríveis e uma tensão praticamente insuportável.",
+            poster: "https://rollingstone.com.br/wp-content/uploads/legacy/2014/img-1026474-whiplash-poster.jpg"
         },
         {
-          id: "7",
-          titulo: "Oldboy",
-          autor: "Park Chan-wook",
-          generos: ["Ação", "Thriller", "Crime"],
-          duracao: 120,
-          anoLancamento: 2003,
-          sinopse: "Um homem é preso em um quarto anônimo por 15 anos, depois é libertado e deve descobrir por que foi sequestrado e quem foi o responsável.",
-          notaDivina: 8.4,
-          notaPublico: 8.4,
-          motivoRecomendacao: "Um thriller de vingança visualmente impressionante com uma reviravolta perturbadora, abordando temas de justiça e redenção.",
-          poster: "https://image.tmdb.org/t/p/original/pWDtjs568ZfOTMbURQBYuT4Qxka.jpg"
+            id: "7",
+            titulo: "Oldboy",
+            autor: "Park Chan-wook",
+            generos: ["Ação", "Thriller", "Crime"],
+            duracao: 120,
+            anoLancamento: 2003,
+            sinopse: "Um homem é preso em um quarto anônimo por 15 anos, depois é libertado e deve descobrir por que foi sequestrado e quem foi o responsável.",
+            notaDivina: 8.4,
+            notaPublico: 8.4,
+            motivoRecomendacao: "Um thriller de vingança visualmente impressionante com uma reviravolta perturbadora, abordando temas de justiça e redenção.",
+            poster: "https://image.tmdb.org/t/p/original/pWDtjs568ZfOTMbURQBYuT4Qxka.jpg"
         },
         {
-          id: "8",
-          titulo:  "A Viagem de Chihiro",
-          autor:  "Hayao Miyazaki",
-          generos: ["Animação", "Aventura"],
-          duracao: 125,
-          anoLancamento: 2001,
-          sinposte: "Uma jovem garota chamada Chihiro se encontra em um mundo mágico e misterioso, onde deve encontrar uma maneira de salvar seus pais e retornar ao mundo real.",
-          notaDivina: 10.0,
-          notaPublico: 8.6,
-          motivoRecomendacao: "Uma obra-prima da animação japonesa que combina uma narrativa encantadora, personagens memoráveis e uma estética visual deslumbrante para criar uma experiência cinematográfica única e inesquecível.",
-          poster: "https://m.media-amazon.com/images/M/MV5BYmZmMmM4OTYtMDkyNi00ZDI5LThiODItNzhlZGI3ZDJmZDZiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
+            id: "8",
+            titulo: "A Viagem de Chihiro",
+            autor: "Hayao Miyazaki",
+            generos: ["Animação", "Aventura"],
+            duracao: 125,
+            anoLancamento: 2001,
+            sinposte: "Uma jovem garota chamada Chihiro se encontra em um mundo mágico e misterioso, onde deve encontrar uma maneira de salvar seus pais e retornar ao mundo real.",
+            notaDivina: 10.0,
+            notaPublico: 8.6,
+            motivoRecomendacao: "Uma obra-prima da animação japonesa que combina uma narrativa encantadora, personagens memoráveis e uma estética visual deslumbrante para criar uma experiência cinematográfica única e inesquecível.",
+            poster: "https://m.media-amazon.com/images/M/MV5BYmZmMmM4OTYtMDkyNi00ZDI5LThiODItNzhlZGI3ZDJmZDZiXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg"
         },
         {
-          id: "9",
-          titulo: "Seven",
-          autor: "David Fincher",
-          generos: ["Thriller", "Crime", "Drama"],
-          duracao: 127,
-          anoLancamento: 1995,
-          sinpose: "Dois detetives enfrentam um serial killer que usa os sete pecados capitais como tema para seus assassinatos brutais.",
-          notaDivina: 8.6,
-          notaPublico: 8.6,
-          motivoRecomendacao: "Um thriller sombrio e perturbador que estabeleceu o tom para muitos filmes de crime posteriores, com uma atmosfera opressiva e uma reviravolta devastadora.",
-          poster: "https://image.tmdb.org/t/p/w500/zgB9sNxR5G43qyI9KZjCv8smpO8.jpg"
+            id: "9",
+            titulo: "Seven",
+            autor: "David Fincher",
+            generos: ["Thriller", "Crime", "Drama"],
+            duracao: 127,
+            anoLancamento: 1995,
+            sinpose: "Dois detetives enfrentam um serial killer que usa os sete pecados capitais como tema para seus assassinatos brutais.",
+            notaDivina: 8.6,
+            notaPublico: 8.6,
+            motivoRecomendacao: "Um thriller sombrio e perturbador que estabeleceu o tom para muitos filmes de crime posteriores, com uma atmosfera opressiva e uma reviravolta devastadora.",
+            poster: "https://image.tmdb.org/t/p/w500/zgB9sNxR5G43qyI9KZjCv8smpO8.jpg"
         },
-        { 
-          id: "10",
-          titulo: "As Crônicas de Spiderwick",
-          autor: "Mark Waters",
-          generos: ["Fantasia", "Aventura", "Comédia"],
-          duracao: 112,
-          anoLancamento: 2008,
-          sinopse: "Uma família se vê envolvida em um mundo de criaturas mágicas ocultas quando descobrem um manual de criaturas fantásticas.",
-          notaDivina: 8.0,
-          notaPublico: 7.8,
-          motivoRecomendacao: "Um filme envolvente e visualmente impressionante que combina elementos de fantasia e aventura para criar uma experiência cinematográfica única e inesquecível.",
-          poster: "https://image.tmdb.org/t/p/w500/fP2lGsqVwPpgHqqd4huwKNdg2Tz.jpg"
-         },
-         {
-          id: "11",
-          titulo: "O Pálido Olho Azul",
-          autor: "S. Darko",
-          generos: ["Horror", "Drama"],
-          duracao: 90,
-          anoLancamento: 2007,
-          sinopse: "Uma exploradora de cavernas descobre uma criatura antiga que coloca em risco a sua vida e a de sua equipe.",
-          notaDivina: 6.5,
-          notaPublico: 6.2,
-          motivoRecomendacao: "Um filme de horror atmosférico que cria tensão através de isolamento e o desconhecido.",
-          poster: "https://image.tmdb.org/t/p/w500/nAU4dVvkZgQvR0M7tKAv9qgtcGL.jpg",
-         }, 
-         { 
-          id: "12",
-          titulo: "Paprika",
-          autor: "Satoshi Kon",
-          generos: ["Animação", "Ficção Científica"],
-          duracao: 104,
-          anoLancamento: 2006,
-          sinopse: "Uma psicóloga que trabalha com um dispositivo que permite entrar nos sonhos dos pacientes tem sua vida virada de cabeça para baixo quando o dispositivo é roubado e usado para causar caos.",
-          notaDivina: 10.0,
-          notaPublico: 7.7,
-          motivoRecomendacao: "Uma obra-prima da animação japonesa que mistura elementos de ficção científica e surrealismo, explorando temas de identidade, realidade e o poder dos sonhos de maneira visualmente deslumbrante e narrativamente complexa.",
-          poster: "https://m.media-amazon.com/images/S/pv-target-images/7863540cdfeb19c162bb351209a5c5c13505f7354f789578c504740000f0e4ad.jpg",
-         },
-         { 
-          id: "13",
-          titulo: "Castelo Animado",
-          autor: "Hayao Miyazaki",
-          generos: ["Animação", "Fantasia", "Romance"],
-          duracao: 119,
-          anoLancamento: 2004,
-          sinopse: "Uma jovem rapariga maldita recebe ajuda de um misterioso mago e é levada a um castelo animado, onde descobre que há mais do que parece.",
-          notaDivina: 8.4,
-          notaPublico: 8.2,
-          motivoRecomendacao: "Uma animação deslumbrante com uma história de fantasia romantizada, personagens encantadores e uma trilha sonora memorável.",
-          poster: "https://image.tmdb.org/t/p/w500/3cyjYtLWCW7A4s5rT2gj2jqVzlR.jpg",
-         },
-         {
-           id: "14",
-           titulo: "Túmulo dos Vagalumes",
-           autor: "Isao Takahata",
-           generos: ["Animação", "Drama", "Guerra"],
-           duracao: 89,
-           anoLancamento: 1988,
-           sinopse: "Dois órfãos enfrentam a pobreza e o bombardeio durante a Segunda Guerra Mundial, com um menino mais velho protegendo sua irmã mais jovem.",
-           notaDivina: 8.5,
-           notaPublico: 8.3,
-           motivoRecomendacao: "Um filme de animação profundamente comovente que oferece uma perspectiva humanista sobre os horrores da guerra através dos olhos de crianças.",
-           poster: "https://image.tmdb.org/t/p/w500/xZvqsfXamQgNAeq4eEL1WEeMsQG.jpg",
-         },
-         {
-           id: "15",
-           titulo: "O Homem Invisível",
-           autor: "Leigh Whannell",
-           generos: ["Horror", "Thriller", "Ficção Científica"],
-           duracao: 125,
-           anoLancamento: 2020,
-           sinopse: "Uma mulher é aterrorizada por seu ex abusivo que encontra um meio de se tornar invisível, permitindo-lhe perseguir-la impunemente.",
-           notaDivina: 7.4,
-           notaPublico: 7.5,
-           motivoRecomendacao: "Um thriller de horror moderno que usa o conceito de invisibilidade de forma criativa, gerando tensão através da ameaça invisível e do gaslighting psicológico.",
-           poster: "https://image.tmdb.org/t/p/w500/djbD2pi3J5wiM5G8eaEXKVjrVB.jpg",
-         },
-         {
-           id: "16",
-           titulo: "10 Coisas Que Eu Odeio em Você",
-           autor: "Gil Junger",
-           generos: ["Comédia", "Romance", "Drama"],
-           duracao: 97,
-           anoLancamento: 1999,
-           sinopse: "Uma tentativa de conquistar uma jovem mulher que odeia romantismo se transforma em uma história de romance genuíno quando dois meninos fazem uma aposta.",
-           notaDivina: 7.6,
-           notaPublico: 7.7,
-           motivoRecomendacao:"Uma comédia romântica leve e divertida baseada em Shakespeare que encanta com seu humor e química entre os protagonistas.",
-           poster: "https://image.tmdb.org/t/p/w500/uxDMWYVz9HY85UQndhQ33r5P9mE.jpg"
+        {
+            id: "10",
+            titulo: "As Crônicas de Spiderwick",
+            autor: "Mark Waters",
+            generos: ["Fantasia", "Aventura", "Comédia"],
+            duracao: 112,
+            anoLancamento: 2008,
+            sinopse: "Uma família se vê envolvida em um mundo de criaturas mágicas ocultas quando descobrem um manual de criaturas fantásticas.",
+            notaDivina: 8.0,
+            notaPublico: 7.8,
+            motivoRecomendacao: "Um filme envolvente e visualmente impressionante que combina elementos de fantasia e aventura para criar uma experiência cinematográfica única e inesquecível.",
+            poster: "https://image.tmdb.org/t/p/w500/fP2lGsqVwPpgHqqd4huwKNdg2Tz.jpg"
+        },
+        {
+            id: "11",
+            titulo: "O Pálido Olho Azul",
+            autor: "S. Darko",
+            generos: ["Horror", "Drama"],
+            duracao: 90,
+            anoLancamento: 2007,
+            sinopse: "Uma exploradora de cavernas descobre uma criatura antiga que coloca em risco a sua vida e a de sua equipe.",
+            notaDivina: 6.5,
+            notaPublico: 6.2,
+            motivoRecomendacao: "Um filme de horror atmosférico que cria tensão através de isolamento e o desconhecido.",
+            poster: "https://image.tmdb.org/t/p/w500/nAU4dVvkZgQvR0M7tKAv9qgtcGL.jpg",
+        },
+        {
+            id: "12",
+            titulo: "Paprika",
+            autor: "Satoshi Kon",
+            generos: ["Animação", "Ficção Científica"],
+            duracao: 104,
+            anoLancamento: 2006,
+            sinopse: "Uma psicóloga que trabalha com um dispositivo que permite entrar nos sonhos dos pacientes tem sua vida virada de cabeça para baixo quando o dispositivo é roubado e usado para causar caos.",
+            notaDivina: 10.0,
+            notaPublico: 7.7,
+            motivoRecomendacao: "Uma obra-prima da animação japonesa que mistura elementos de ficção científica e surrealismo, explorando temas de identidade, realidade e o poder dos sonhos de maneira visualmente deslumbrante e narrativamente complexa.",
+            poster: "https://m.media-amazon.com/images/S/pv-target-images/7863540cdfeb19c162bb351209a5c5c13505f7354f789578c504740000f0e4ad.jpg",
+        },
+        {
+            id: "13",
+            titulo: "Castelo Animado",
+            autor: "Hayao Miyazaki",
+            generos: ["Animação", "Fantasia", "Romance"],
+            duracao: 119,
+            anoLancamento: 2004,
+            sinopse: "Uma jovem rapariga maldita recebe ajuda de um misterioso mago e é levada a um castelo animado, onde descobre que há mais do que parece.",
+            notaDivina: 8.4,
+            notaPublico: 8.2,
+            motivoRecomendacao: "Uma animação deslumbrante com uma história de fantasia romantizada, personagens encantadores e uma trilha sonora memorável.",
+            poster: "https://image.tmdb.org/t/p/w500/3cyjYtLWCW7A4s5rT2gj2jqVzlR.jpg",
+        },
+        {
+            id: "14",
+            titulo: "Túmulo dos Vagalumes",
+            autor: "Isao Takahata",
+            generos: ["Animação", "Drama", "Guerra"],
+            duracao: 89,
+            anoLancamento: 1988,
+            sinopse: "Dois órfãos enfrentam a pobreza e o bombardeio durante a Segunda Guerra Mundial, com um menino mais velho protegendo sua irmã mais jovem.",
+            notaDivina: 8.5,
+            notaPublico: 8.3,
+            motivoRecomendacao: "Um filme de animação profundamente comovente que oferece uma perspectiva humanista sobre os horrores da guerra através dos olhos de crianças.",
+            poster: "https://image.tmdb.org/t/p/w500/xZvqsfXamQgNAeq4eEL1WEeMsQG.jpg",
+        },
+        {
+            id: "15",
+            titulo: "O Homem Invisível",
+            autor: "Leigh Whannell",
+            generos: ["Horror", "Thriller", "Ficção Científica"],
+            duracao: 125,
+            anoLancamento: 2020,
+            sinopse: "Uma mulher é aterrorizada por seu ex abusivo que encontra um meio de se tornar invisível, permitindo-lhe perseguir-la impunemente.",
+            notaDivina: 7.4,
+            notaPublico: 7.5,
+            motivoRecomendacao: "Um thriller de horror moderno que usa o conceito de invisibilidade de forma criativa, gerando tensão através da ameaça invisível e do gaslighting psicológico.",
+            poster: "https://image.tmdb.org/t/p/w500/djbD2pi3J5wiM5G8eaEXKVjrVB.jpg",
+        },
+        {
+            id: "16",
+            titulo: "10 Coisas Que Eu Odeio em Você",
+            autor: "Gil Junger",
+            generos: ["Comédia", "Romance", "Drama"],
+            duracao: 97,
+            anoLancamento: 1999,
+            sinopse: "Uma tentativa de conquistar uma jovem mulher que odeia romantismo se transforma em uma história de romance genuíno quando dois meninos fazem uma aposta.",
+            notaDivina: 7.6,
+            notaPublico: 7.7,
+            motivoRecomendacao: "Uma comédia romântica leve e divertida baseada em Shakespeare que encanta com seu humor e química entre os protagonistas.",
+            poster: "https://image.tmdb.org/t/p/w500/uxDMWYVz9HY85UQndhQ33r5P9mE.jpg"
         }
     ];
 
@@ -723,7 +717,7 @@ async function preencherRolos() {
 
     // Embaralha filmes para ordem aleatoria (cada reload diferente)
     filmes = shuffleArray(filmes);
-    
+
     const filmstripLeft = document.getElementById("filmstrip-left");
     const filmstripRight = document.getElementById("filmstrip-right");
 
@@ -775,7 +769,11 @@ function criarFrameFilmstrip(container, filme) {
 
     // Clique no frame abre os detalhes do filme
     frame.addEventListener("click", () => {
-        abrirTelaDetalhes(filme, ultimosCriteria || { generos: [], duracoes: [], decadas: [] });
+        abrirTelaDetalhes(filme, ultimosCriteria || {
+            generos: [],
+            duracoes: [],
+            decadas: []
+        });
     });
 
     container.appendChild(frame);
@@ -814,6 +812,18 @@ function mostrarMensagem(texto) {
     card.appendChild(p);
     container.innerHTML = "";
     container.appendChild(card);
+}
+
+/* Restaura a mensagem padrão do painel de resultados */
+function mostrarMensagemPadrao() {
+    const container = document.getElementById("results-container");
+    if (!container) return;
+    container.classList.remove("modo-lista");
+    container.innerHTML =
+    `<div class="card mensagem-card" id="description-card">
+        <h3>Seu próximo filme está aqui 🎬</h3>
+        <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
+    </div>`;
 }
 
 /*
