@@ -187,6 +187,14 @@ document.addEventListener("DOMContentLoaded", () => {
         estado.decadas.length = 0;
         document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
         document.getElementById("decada-custom").value = "";
+
+        // Limpar carrossel movile
+        const carouselContainer = document.getElementById("carousel-container");
+        if (carouselContainer) carouselContainer.style.display = "none";
+
+        const descriptionCard = document.getElementById("description-card");
+        if (descriptionCard) descriptionCard.style.display = "";
+
         mostrarMensagemPadrao();
         if (isMobileView()) {
             setContainerExpanded("filters", true);
@@ -233,14 +241,14 @@ function getPanelRefs(panel) {
     if (panel === "filters") {
         return {
             container: document.getElementById("filters-container"),
-            toggle: document.getElementById ("toggle-filters-btn")
+            toggle: document.getElementById("toggle-filters-btn")
         };
     }
 
     if (panel === "results") {
         return {
             container: document.getElementById("results-container"),
-            toggle: document.getElementById ("toggle-results-btn")
+            toggle: document.getElementById("toggle-results-btn")
         };
     }
 
@@ -251,7 +259,10 @@ function getPanelRefs(panel) {
 }
 
 function setContainerExpanded(panel, expanded) {
-    const { container, toggle } = getPanelRefs(panel);
+    const {
+        container,
+        toggle
+    } = getPanelRefs(panel);
     if (!container || !toggle) return;
 
     container.classList.toggle("is-collapsed", !expanded);
@@ -259,9 +270,12 @@ function setContainerExpanded(panel, expanded) {
 }
 
 function toggleContainer(panel) {
-    const { container, toggle } = getPanelRefs(panel);
+    const {
+        container,
+        toggle
+    } = getPanelRefs(panel);
     if (!container || !toggle) return;
-    
+
     const currentlyExpanded = toggle.getAttribute("aria-expanded") === "true";
     const nextExpanded = !currentlyExpanded;
     setContainerExpanded(panel, nextExpanded);
@@ -289,21 +303,21 @@ function getFilterGroupRefs(group) {
     if (group === "generos") {
         return {
             container: document.getElementById("group-generos"),
-            toggle: document.getElementById ("toggle-generos-btn")
+            toggle: document.getElementById("toggle-generos-btn")
         };
     }
 
     if (group === "duracoes") {
         return {
             container: document.getElementById("group-duracoes"),
-            toggle: document.getElementById ("toggle-duracoes-btn")
+            toggle: document.getElementById("toggle-duracoes-btn")
         };
     }
 
     if (group === "decadas") {
         return {
             container: document.getElementById("group-decadas"),
-            toggle: document.getElementById ("toggle-decadas-btn")
+            toggle: document.getElementById("toggle-decadas-btn")
         };
     }
 
@@ -314,7 +328,10 @@ function getFilterGroupRefs(group) {
 }
 
 function setFilterGroupExpanded(group, expanded) {
-    const { container, toggle } = getFilterGroupRefs(group);
+    const {
+        container,
+        toggle
+    } = getFilterGroupRefs(group);
     if (!container || !toggle) return;
 
     container.classList.toggle("is-collapsed", !expanded);
@@ -322,7 +339,9 @@ function setFilterGroupExpanded(group, expanded) {
 }
 
 function toggleFilterGroup(group) {
-    const { toggle } = getFilterGroupRefs(group);
+    const {
+        toggle
+    } = getFilterGroupRefs(group);
     if (!toggle) return;
 
     const currentlyExpanded = toggle.getAttribute("aria-expanded") === "true";
@@ -336,10 +355,12 @@ function setAllFilterGroupsExpanded(expanded) {
 }
 
 function initFilterGroupPanels() {
-    const groups = ["generos","duracoes","decadas"];
+    const groups = ["generos", "duracoes", "decadas"];
 
     groups.forEach(group => {
-        const { toggle } = getFilterGroupRefs(group);
+        const {
+            toggle
+        } = getFilterGroupRefs(group);
         if (!toggle) return;
 
         toggle.addEventListener("click", () => toggleFilterGroup(group));
@@ -461,9 +482,17 @@ async function listarFilmes(criteria) {
         const content = getResultsContent();
         if (!container || !content) return;
 
-        content.innerHTML = `<h3 class="lista-titulo">${dados.length} filme(s) encontrado(s):</h3>`;
-        dados.forEach(filme => container.appendChild(criarCardResumo(filme)));
-        container.classList.add("modo-lista");
+        // Detecta se é mobile para renderizar em carrossel
+        const isMobile = isMobileView();
+
+        if (isMobile) {
+            renderCarrossel(dados, criteria);
+        } else {
+            // Desktop: renderizar lista normal
+            content.innerHTML = `<h3 class="lista-titulo">${dados.length} filme(s) encontrado(s):</h3>`;
+            dados.forEach(filme => container.appendChild(criarCardResumo(filme)));
+            container.classList.add("modo-lista");
+        }
 
         if (isMobileView()) {
             setContainerExpanded("filters", false);
@@ -475,6 +504,157 @@ async function listarFilmes(criteria) {
     } finally {
         setBotoesDisabled(false);
     }
+}
+
+/* Renderizar carrossel mobile de filmes */
+function renderCarrossel(filmes, criteria) {
+    const container = document.getElementById("results-container");
+    const content = getResultsContent();
+    if (!container || !content) return;
+
+    // Reconstrói a estrutura do carrossel (em caso de ter sido removido por mostrarLoading)
+    content.innerHTML = `<div class="carousel-container" id="carousel-container" style="display: flex;">
+    <div class="carousel-wrapper">
+        <div class="carousel-track" id="carousel-track">
+            <!-- Filme por vez via JS -->
+        </div>
+    </div>
+    <div class="carousel-nav">
+        <button class="carousel-btn carousel-btn-prev" id="carousel-prev"
+            aria-label="Filme anterior">«</button>
+        <div class="carousel-indicator" id="carousel-indicator">1 de 1</div>
+        <button class="carousel-btn carousel-btn-next" id="carousel-next"
+            aria-label="Próximo filme">»</button>
+    </div>
+</div>`;
+
+    const carouselContainer = document.getElementById("carousel-container");
+    const carouselTrack = document.getElementById("carousel-track");
+
+    // Limpa carrossel anterior
+    carouselTrack.innerHTML = "";
+
+    // Renderiza slides
+    filmes.forEach((filme, index) => {
+        const slide = document.createElement("div");
+        slide.className = "carousel-slide";
+
+        const posterHtml = filme.poster 
+        ? `<img src"${escapeUrl(filme.poster)}" alt="Poster de ${escapeHtml(filme.titulo)}"
+        class="carousel-poster" />`
+        : `<div class="carousel-poster no-image">🎬</div>`;
+
+        const generos = filme.generos?.map(g => escapeHtml(g)).join(", ") || "-";
+        const duracao = filme.duracao ? `${escapeHtml(filme.duracao)} min` : "-";
+
+        slide.innerHTML = `
+        ${posterHtml}
+        <div class="carousel-content">
+        <h2 class="carousel-title">${escapeHtml(filme.titulo)}</h2>
+        <div class="carousel-year">${escapeHtml(filme.anoLancamento) || "-"}</div>
+        <div class="carousel-genres"${generos}</div>
+        <div class="carousel-duration">${duracao}</div>
+        </div>
+        `;
+
+        // Clica para abrir detalhes
+        slide.addEventListener("click", () => {
+            abrirTelaDetalhes(filme, criteria);
+        });
+
+        carouselTrack.appendChild(slide);
+    });
+
+    // Mostra carrossel
+    carouselContainer.style.display = "flex";
+
+    // Configura navegação
+    setupCarouselNav(filmes.length);
+
+    container.classList.remove("modo-lista");
+}
+
+/* Configura navegação do carrossel (botões próximo/anterior) */
+function setupCarouselNav(totalFilmes) {
+    const track = document.getElementById("carousel-track");
+    const prevBtn = document.getElementById("carousel-prev");
+    const nextBtn = document.getElementById("carousel-next");
+    const indicator = document.getElementById("carousel-indicator");
+
+    let currentIndex = 0;
+
+    const updateIndicator = () => {
+        indicator.textContent = `${currentIndex + 1} de ${totalFilmes}`;
+    };
+
+    const updateButtons = () => {
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === totalFilmes - 1;
+    };
+
+    const scrollToSlide = (index) => {
+        const slideWidth = track.children[0].offsetWidth + 0;
+        const scrollPosition = index * slideWidth;
+        track.scrollLeft = scrollPosition;
+        currentIndex = index;
+        updateIndicator();
+        updateButtons();
+    };
+
+    // Botão anterior
+    prevBtn.addEventListener("click", () => {
+        if (currentIndex > 0) scrollToSlide(currentIndex - 1);
+    });
+
+    // Botão próximo
+    nextBtn.addEventListener("click", () => {
+        if (currentIndex < totalFilmes - 1) scrollToSlide(currentIndex + 1);
+    });
+
+    // Suporte a swipe/drag (mobile friendly)
+    let startX = 0;
+    let currentScroll = 0;
+    let isDragging = false;
+
+    track.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        currentScroll = track.scrollLeft;
+    });
+
+    track.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentScroll = track.scrollLeft;
+    });
+
+    const handleDragMove = (clientX) => {
+        if (!isDragging) return;
+        const diff = startX - clienteX;
+        track.scrollLeft = currentScroll + diff;
+    };
+
+    track.addEventListener("mousemove", (e) => handleDragMove(e.clientX));
+    track.addEventListener("touchmove", (e) => handleDragMove(e.touches[0].clientX), { passive: true });
+
+    const handleDragEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        // Snap ao slide mais próximo
+        const slideWidth = track.children[0].offsetWidth;
+        const newIndex = Math.round(track.scrollLeft / slideWidth);
+        const clampedIndex = Math.min(newIndex, totalFilmes - 1);
+        scrollToSlide(clampedIndex);
+    };
+
+    track.addEventListener("mouseup", handleDragEnd);
+    track.addEventListener("mouseleave", handleDragEnd);
+    track.addEventListener("touchend", handleDragEnd);
+
+    // Inicializa
+    updateIndicator();
+    updateButtons();
 }
 
 /**
@@ -995,7 +1175,7 @@ function mostrarMensagemPadrao() {
 
     container.classList.remove("modo-lista");
     content.innerHTML =
-    `<div class="card mensagem-card" id="description-card">
+        `<div class="card mensagem-card" id="description-card">
         <h3>Seu próximo filme está aqui 🎬</h3>
         <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que assistir hoje!</p>
     </div>`;
