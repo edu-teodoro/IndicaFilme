@@ -61,11 +61,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 </head>
 
 <body>
-
     <div class="background-gradient" id="gradient"></div>
 
     <div class="theme-toggle-container">
@@ -77,7 +75,6 @@
 
     <!-- Tela Principal (index) -->
     <div id="tela-principal" class="main-container">
-
         <!-- Rolo de Filmes - Lado Esquerdo -->
         <div class="filmstrip-container filmstrip-left">
             <div class="filmstrip" id="filmstrip-left">
@@ -185,20 +182,38 @@
             </div>
 
             <!-- ÁREA DE RESULTADOS -->
-            <div class="mobile-panel-header">
-                <button id="toggle-results-btn" class="mobile-panel-toggle" type="button" aria-expanded="true"
-                    aria-controls="results-content">
-                    <span class="mobile-panel-titler">Resultados</span>
-                    <span class="mobile-panel-icon" aria-hidden="true">▼</span>
-                </button>
-            </div>
+            <div class="results-container" id="results-container">
+                <div class="mobile-panel-header">
+                    <button id="toggle-results-btn" class="mobile-panel-toggle" type="button" aria-expanded="true"
+                        aria-controls="results-content">
+                        <span class="mobile-panel-title">Resultados</span>
+                        <span class="mobile-panel-icon" aria-hidden="true">▼</span>
+                    </button>
+                </div>
 
-            <div class="mobile-panel-content" id="results-content">
-                <div class="card mensagem-card" id="description-card">
-                    <h3>Seu próximo filme está aqui</h3>
-                    <br>
-                    <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que
-                        assistir hoje!</p>
+                <div class="mobile-panel-content" id="results-content">
+                    <!-- Carrossel Mobile (oculto por padrão) -->
+                    <div class="carousel-container" id="carousel-container" style="display: none;">
+                        <div class="carousel-wrapper">
+                            <div class="carousel-track" id="carousel-track">
+                                <!-- Filme por vez via JS -->
+                            </div>
+                        </div>
+                        <div class="carousel-nav">
+                            <button class="carousel-btn carousel-btn-prev" id="carousel-prev"
+                                aria-label="Filme anterior">«</button>
+                            <div class="carousel-indicator" id="carousel-indicator">1 de 1</div>
+                            <button class="carousel-btn carousel-btn-next" id="carousel-next"
+                                aria-label="Próximo filme">»</button>
+                        </div>
+                    </div>
+
+                    <div class="card mensagem-card" id="description-card">
+                        <h3>Seu próximo filme está aqui</h3>
+                        <br>
+                        <p>Selecione ao menos um filtro e clique em <strong>Sortear Filme</strong> para descobrir o que
+                            assistir hoje!</p>
+                    </div>
                 </div>
             </div>
         </div>
