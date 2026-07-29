@@ -229,6 +229,39 @@
     <!-- TELA DE DETALHES DO FILME (abre ao sortear) -->
     <div id="tela-detalhes" class="detalhes-container" style="display:none;">
 
+    <!-- TV Estática Overlay -->
+     <div id="tv-static-overlay" class="tv-static-overlay">
+        <div class="tv-container">
+            <!-- Carcaça da TV (madeira) -->
+             <div class="tv-bezel">
+                <!-- Moldura superior -->
+                 <div class="tv-top-bezel"></div>
+
+                 <!-- Tela -->
+                  <div class="tv-screen">
+                    <canvas id="static-canvas" class="static-canvas"></canvas>
+                    <div class="static-lines"></div>
+                  </div>
+
+                  <!-- Moldura inferior com painel de controle -->
+                   <div class="tv-buttom-bezel">
+                    <div class="tv-brand">📺</div>
+                    <div class="tv-controls">
+                        <button class="control-btn"></button>
+                        <button class="control-btn"></button>
+                    </div>
+                   </div>
+             </div>
+
+             <!-- Suporte/pé da TV -->
+              <div class="tv-stand"></div>
+        </div>
+
+        <!-- Mensagem -->
+         <div id="tv-message" class="tv-message">O filme sorteado foi...</div>
+
+     </div>
+
         <!-- Mantém os filtros no topo -->
         <div class="detalhes-filtros">
             <div class="filtros-resumo" id="filtros-resumo"></div>
