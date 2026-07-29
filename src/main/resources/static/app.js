@@ -160,6 +160,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("voltar-btn").addEventListener("click", () => {
         const telaDetalhes = document.getElementById("tela-detalhes");
         const telaPrincipal = document.getElementById("tela-principal");
+        const overlay = document.getElementById("tv-static-overlay");
+
+        // Reset completo do overlay
+        if (overlay) {
+            overlay.style.display = "none";
+            overlay.classList.remove("fade-out");
+        }
 
         telaDetalhes.classList.remove("fade-in");
         telaDetalhes.style.display = "none";
@@ -539,10 +546,10 @@ function renderCarrossel(filmes, criteria) {
         const slide = document.createElement("div");
         slide.className = "carousel-slide";
 
-        const posterHtml = filme.poster 
-        ? `<img src"${escapeUrl(filme.poster)}" alt="Poster de ${escapeHtml(filme.titulo)}"
-        class="carousel-poster" />`
-        : `<div class="carousel-poster no-image">🎬</div>`;
+        const posterHtml = filme.poster ?
+            `<img src"${escapeUrl(filme.poster)}" alt="Poster de ${escapeHtml(filme.titulo)}"
+        class="carousel-poster" />` :
+            `<div class="carousel-poster no-image">🎬</div>`;
 
         const generos = filme.generos?.map(g => escapeHtml(g)).join(", ") || "-";
         const duracao = filme.duracao ? `${escapeHtml(filme.duracao)} min` : "-";
@@ -635,7 +642,9 @@ function setupCarouselNav(totalFilmes) {
     };
 
     track.addEventListener("mousemove", (e) => handleDragMove(e.clientX));
-    track.addEventListener("touchmove", (e) => handleDragMove(e.touches[0].clientX), { passive: true });
+    track.addEventListener("touchmove", (e) => handleDragMove(e.touches[0].clientX), {
+        passive: true
+    });
 
     const handleDragEnd = () => {
         if (!isDragging) return;
@@ -766,6 +775,9 @@ function abrirTelaDetalhes(filme, criteria) {
             </div>
         </div>
     `;
+
+    // Mostrar TV com estática antes de revelar o filme
+    mostrarTVComEstatica();
 
     window.scrollTo(0, 0);
 }
@@ -1205,4 +1217,114 @@ function setBotoesDisabled(disabled) {
         const btn = document.getElementById(id);
         if (btn) btn.disabled = disabled;
     });
+}
+
+/* Gera e anima a estatica da tv */
+function gerarEstatica() {
+    const canvas = document.getElementById("static-canvas");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    const width = canvas.width = canvas.offsetWidth;
+    const height = canvas.height = canvas.offsetHeight;
+
+    function desenharEstatica() {
+        const imageData = ctx.createImageData(width, height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const pixel = Math.random() * 255;
+
+            // Gera ruido com cores azul e verde (para efeito de TV retro)
+            const r = pixel < 127 ? Math.floor(Math.random() * 100) : 0;
+            const g = Math.random() * 200;
+            const b = Math.random() * 255;
+            const a = 255;
+
+            data[i] = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+            data[i + 3] = a;
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    const animacaoId = setInterval(desenharEstatica, 50);
+    return animacaoId;
+
+}
+
+/* Mostra a TV com esstatica e depois a revela o filme sorteado */
+function mostrarTVComEstatica() {
+    const overlay = document.getElementById("tv-static-overlay");
+    const tvBezel = document.querySelector(".tv-bezel");
+    const tvStand = document.querySelector(".tv-stand");
+    const tvMessage = document.getElementById("tv-message");
+
+    if (!overlay || !tvBezel || !tvMessage || !tvStand) return;
+
+    // Reset completo
+    // Remove todas as classes de animação
+    tvBezel.classList.remove("grow-and-fade", "reset-animation");
+    tvStand.classList.remove("grow-and-fade", "reset-animation");
+    tvMessage.classList.remove("reset-animation");
+    overlay.classList.remove("fade-out");
+
+    // Reset animaçoes inline
+    tvBezel.style.aniamation = "none";
+    tvBezel.style.transform = "";
+    tvBezel.style.opacity = "";
+    tvBezel.style.removeProperty("animation");
+    tvBezel.style.removeProperty("transform");
+    tvBezel.style.removeProperty("opacity");
+
+    tvStand.style.aniamation = "none";
+    tvStand.style.transform = "";
+    tvStand.style.opacity = "";
+    tvStand.style.removeProperty("animation");
+    tvStand.style.removeProperty("transform");
+    tvStand.style.removeProperty("opacity");
+
+    tvMessage.style.aniamation = "none";
+    tvMessage.style.transform = "";
+    tvMessage.style.opacity = "";
+    tvMessage.style.removeProperty("animation");
+    tvMessage.style.removeProperty("transform");
+    tvMessage.style.removeProperty("opacity");
+
+    overlay.style.opacity = "";
+    overlay.style.display = "flex";
+
+    // Force reflow para resetar o layout
+    void tvBezel.offsetHeight;
+    void tvStand.offsetHeight;
+    void tvMessage.offsetHeight;
+    void overlay.offsetHeight;
+
+    // Iniciar Animação
+    // Aguarda um frame (requestAnimationFrame) para garantir que o reset foi processado
+    requestAnimationFrame(() => {
+        // Inicia a animação de estatica
+        const animacaoId = gerarEstatica();
+
+        // Em 1.8s: TV e pé começam a crescer e desaparecer
+        setTimeout(() => {
+            tvBezel.classList.add("grow-and-fade");
+            tvStand.classList.add("grow-and-fade");
+            clearInterval(animacaoId);
+        }, 2500);
+
+        // Em 3.5s (quando TV terminar de desaparecer): Começar fade-out do overlay
+        setTimeout(() => {
+            overlay.classList.add("fade-out");
+
+            // Após a transição do overlay (1s), remover do DOM e revelar contepudo
+            setTimeout(() => {
+                overlay.style.display = "none";
+            }, 1000);
+        }, 3500);
+
+    });
+
 }
