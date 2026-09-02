@@ -1058,6 +1058,19 @@ async function listarFilmes(criteria) {
                     notaPublico: 7.7,
                     motivoRecomendacao: "Uma comédia romântica leve e divertida baseada em Shakespeare que encanta com seu humor e química entre os protagonistas.",
                     poster: "https://image.tmdb.org/t/p/w500/uxDMWYVz9HY85UQndhQ33r5P9mE.jpg"
+                },
+                {
+                    id: "17",
+                    titulo: "Tokyo Godfathers",
+                    autor: "Satoshi Kon",
+                    generos: ["Animação", "Comédia", "Drama"],
+                    duracao: 92,
+                    anoLancamento: 2003,
+                    sinopse: "Três sem-teto encontram um bebê abandonado na véspera de Natal e embarcam em uma jornada para encontrar seus pais, enfrentando desafios e descobrindo segredos do passado.",
+                    notaDivina: 10.0,
+                    notaPublico: 8.0,
+                    motivoRecomendacao: "Uma animação comovente e divertida que mistura humor, drama e crítica social, explorando temas de família, redenção e a importância da empatia.",
+                    poster: "https://image.tmdb.org/t/p/w500/uxDMWYVz9HY85UQndhQ33r5P9mE.jpg"
                 }
             ];
 
