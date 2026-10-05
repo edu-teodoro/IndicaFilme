@@ -10,7 +10,7 @@ Sistema de recomendação e sorteio de filmes com filtros por gênero, duração
 mvn spring-boot:run "-Dspring-boot.run.profiles=local"
 ```
 
-A aplicação ficará disponível em `http://localhost:8086`.
+A aplicação ficará disponível em `http://localhost:1040`.
 
 ### Rodar usando MongoDB real
 

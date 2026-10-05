@@ -37,7 +37,7 @@ ou
 java -jar target/indica-filmes-1.0.0.jar --spring.profiles.active=local
 ```
 
-A aplicação ficará disponível em `http://localhost:8099`.
+A aplicação ficará disponível em `http://localhost:1040`.
 
 ### Rodar sem perfil local (MongoDB real)
 
@@ -66,10 +66,10 @@ Por padrão, o servidor roda em `http://localhost:8080`.
 
 ### Perfil local
 
-Ativa `application-local.yml` e desabilita a autoconfiguração de MongoDB, permitindo rodar sem dependências externas.
+Ativa `application-local.yml` e usa o repositório em memória, permitindo rodar sem dependências externas.
 
-- porta: `8086`
-- admin key padrão: `indica-filmes-admin-secret-2026` (pode ser sobrescrito por `ADMIN_API_KEY`)
+- porta: `1041`
+- `ADMIN_API_KEY` deve ser definida para liberar os endpoints administrativos
 - Swagger habilitado via `springdoc.swagger-ui.enabled=true`
 
 ### Perfil real / produção
