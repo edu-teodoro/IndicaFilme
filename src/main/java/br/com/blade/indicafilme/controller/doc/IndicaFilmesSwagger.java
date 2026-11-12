@@ -17,10 +17,7 @@ import org.springframework.context.annotation.Configuration;
         description = "API REST do sistema Indica Filmes." +
             "Endpoints públicos permitem buscar e sortear filmes com filtros. "+
             "Endpoints admin (protegidos por X-Admin-Key) permitem gerenciar o catálogo.",
-        contact = @Contact(
-            name = "Administrador",
-            email = "redacted@users.noreply.github.com"
-        )
+        contact = @Contact(name = "Indica Filmes")
     ),
     servers = {
         @Server(url = "/", description = "Servidor atual")
