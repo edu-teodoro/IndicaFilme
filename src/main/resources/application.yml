@@ -53,3 +53,17 @@ management:
   endpoint:
     health:
       show-details: never
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+
+app:
+  fallback:
+    local-enabled: true

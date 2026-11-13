@@ -5,8 +5,6 @@ services:
     image: mongo:7
     container_name: indica-mongodb
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:27017:27017"
     volumes:
       - mongodb_data:/data/db
     healthcheck:
@@ -29,11 +27,11 @@ services:
     environment:
       SERVER_PORT: "8080"
       MONGODB_URI: "mongodb://mongodb:27017/indica-filmes"
-      LOCAL_FALLBACK_ENABLED: "false"
+      FALLBACK_LOCAL_ENABLED: "false"
       SWAGGER_ENABLED: "false"
       LOG_LEVEL: "INFO"
-      ADMIN_API_KEY: "${ADMIN_API_KEY:}"
-      TMDB_API_KEY: ""
+      ADMIN_API_KEY: "${ADMIN_API_KEY:?Set ADMIN_API_KEY in .env}"
+      TMDB_API_KEY: "${TMDB_API_KEY:-}"
 
 volumes:
   mongodb_data:

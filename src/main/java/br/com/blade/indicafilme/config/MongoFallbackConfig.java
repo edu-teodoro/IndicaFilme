@@ -8,18 +8,18 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile("local")
 public class MongoFallbackConfig {
 
     private static final Logger log = LoggerFactory.getLogger(MongoFallbackConfig.class);
 
     @Bean
-    @ConditionalOnMissingBean(MongoTemplate.class)
-    @ConditionalOnProperty(prefix = "app.fallback", name = "local-enabled", havingValue = "true")
+    @ConditionalOnProperty(prefix = "app.fallback", name = "local-enabled", havingValue = "true", matchIfMissing = true)
     public MovieRepository inMemoryMovieRepositoryFallback() {
-        log.warn(" MongoDB INDISPONÍVEL - usando base de filmes em memória.");
+        log.info("Perfil local ativo - usando catálogo de filmes em memória.");
         return new InMemoryMovieRepository();
     }
 }
