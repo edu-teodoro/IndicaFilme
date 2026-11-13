@@ -9,19 +9,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        java-version: ["17", "21"]
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: read
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK ${{ matrix.java-version }}
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: ${{ matrix.java-version }}
+          java-version: "21"
           distribution: "temurin"
           cache: maven
 
@@ -36,10 +36,10 @@ jobs:
         run: mvn surefire-report:report
 
       - name: Upload Test Results
-        if: always()
+        if: always() && hashFiles('target/surefire-reports/TEST-*.xml') != ''
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-java-${{ matrix.java-version }}
+          name: test-results-java-21
           path: target/surefire-reports/
           retention-days: 30
 
@@ -50,8 +50,13 @@ jobs:
         run: docker build -t indica-filmes:latest .
 
       - name: Publish Test Report
-        if: always()
+        if: >-
+          always() &&
+          hashFiles('target/surefire-reports/TEST-*.xml') != '' &&
+          (github.event_name != 'pull_request' ||
+          github.event.pull_request.head.repo.full_name == github.repository)
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: target/surefire-reports/TEST-*.xml
           check_name: Test Results
+          comment_mode: off
