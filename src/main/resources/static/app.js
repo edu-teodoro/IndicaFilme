@@ -194,14 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
         estado.decadas.length = 0;
         document.querySelectorAll(".tag.ativa").forEach(tag => tag.classList.remove("ativa"));
         document.getElementById("decada-custom").value = "";
-
-        // Limpar carrossel movile
-        const carouselContainer = document.getElementById("carousel-container");
-        if (carouselContainer) carouselContainer.style.display = "none";
-
-        const descriptionCard = document.getElementById("description-card");
-        if (descriptionCard) descriptionCard.style.display = "";
-
         mostrarMensagemPadrao();
         if (isMobileView()) {
             setContainerExpanded("filters", true);
@@ -248,14 +240,14 @@ function getPanelRefs(panel) {
     if (panel === "filters") {
         return {
             container: document.getElementById("filters-container"),
-            toggle: document.getElementById("toggle-filters-btn")
+            toggle: document.getElementById ("toggle-filters-btn")
         };
     }
 
     if (panel === "results") {
         return {
             container: document.getElementById("results-container"),
-            toggle: document.getElementById("toggle-results-btn")
+            toggle: document.getElementById ("toggle-results-btn")
         };
     }
 
@@ -266,10 +258,7 @@ function getPanelRefs(panel) {
 }
 
 function setContainerExpanded(panel, expanded) {
-    const {
-        container,
-        toggle
-    } = getPanelRefs(panel);
+    const { container, toggle } = getPanelRefs(panel);
     if (!container || !toggle) return;
 
     container.classList.toggle("is-collapsed", !expanded);
@@ -277,12 +266,9 @@ function setContainerExpanded(panel, expanded) {
 }
 
 function toggleContainer(panel) {
-    const {
-        container,
-        toggle
-    } = getPanelRefs(panel);
+    const { container, toggle } = getPanelRefs(panel);
     if (!container || !toggle) return;
-
+    
     const currentlyExpanded = toggle.getAttribute("aria-expanded") === "true";
     const nextExpanded = !currentlyExpanded;
     setContainerExpanded(panel, nextExpanded);
@@ -310,21 +296,21 @@ function getFilterGroupRefs(group) {
     if (group === "generos") {
         return {
             container: document.getElementById("group-generos"),
-            toggle: document.getElementById("toggle-generos-btn")
+            toggle: document.getElementById ("toggle-generos-btn")
         };
     }
 
     if (group === "duracoes") {
         return {
             container: document.getElementById("group-duracoes"),
-            toggle: document.getElementById("toggle-duracoes-btn")
+            toggle: document.getElementById ("toggle-duracoes-btn")
         };
     }
 
     if (group === "decadas") {
         return {
             container: document.getElementById("group-decadas"),
-            toggle: document.getElementById("toggle-decadas-btn")
+            toggle: document.getElementById ("toggle-decadas-btn")
         };
     }
 
@@ -335,10 +321,7 @@ function getFilterGroupRefs(group) {
 }
 
 function setFilterGroupExpanded(group, expanded) {
-    const {
-        container,
-        toggle
-    } = getFilterGroupRefs(group);
+    const { container, toggle } = getFilterGroupRefs(group);
     if (!container || !toggle) return;
 
     container.classList.toggle("is-collapsed", !expanded);
@@ -346,9 +329,7 @@ function setFilterGroupExpanded(group, expanded) {
 }
 
 function toggleFilterGroup(group) {
-    const {
-        toggle
-    } = getFilterGroupRefs(group);
+    const { toggle } = getFilterGroupRefs(group);
     if (!toggle) return;
 
     const currentlyExpanded = toggle.getAttribute("aria-expanded") === "true";
@@ -362,12 +343,10 @@ function setAllFilterGroupsExpanded(expanded) {
 }
 
 function initFilterGroupPanels() {
-    const groups = ["generos", "duracoes", "decadas"];
+    const groups = ["generos","duracoes","decadas"];
 
     groups.forEach(group => {
-        const {
-            toggle
-        } = getFilterGroupRefs(group);
+        const { toggle } = getFilterGroupRefs(group);
         if (!toggle) return;
 
         toggle.addEventListener("click", () => toggleFilterGroup(group));
