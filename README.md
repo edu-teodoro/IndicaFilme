@@ -30,6 +30,7 @@ mvn spring-boot:run
 ## Notas rápidas
 
 - Perfil `local` usa dados em memória e não exige MongoDB.
+- Essa configuração faz parte do projeto; `application-local.yml` é opcional para ajustes locais e não deve ser necessário para iniciar a aplicação.
 - Ao usar o filtro de duração, apenas uma opção pode ser selecionada por vez.
 - O Dockerfile já está pronto para build e execução em container.
 - Para deploy gratuito, considere Railway, Render ou Fly.io com MongoDB Atlas.
