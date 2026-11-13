@@ -53,7 +53,7 @@ Defina as variáveis de ambiente:
 Exemplo:
 
 ```powershell
-$env:MONGODB_URI="mongodb://localhost:27017/indicafilmes"
+$env:MONGODB_URI="mongodb://USERNAME:PASSWORD@localhost:27017/indicafilmes?authSource=admin"
 $env:TMDB_API_KEY="sua_chave_tmdb"
 $env:ADMIN_API_KEY="sua_chave_admin"
 $env:CORS_ORIGINS="http://localhost:8080,http://localhost:3000"
@@ -94,7 +94,7 @@ Os valores suportados são:
 Exemplo de URI:
 
 ```powershell
-$env:MONGODB_URI="mongodb://REDACTED"
+$env:MONGODB_URI="mongodb://USERNAME:PASSWORD@localhost:27017/indicafilmes?authSource=admin"
 ```
 
 ## Endpoints principais

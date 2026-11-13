@@ -9,6 +9,8 @@ on:
 jobs:
   quality-gate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
@@ -21,29 +23,14 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: Run Tests with Coverage
-        run: mvn clean test jacoco:report
+      - name: Run Tests and Generate Coverage Report
+        run: mvn --batch-mode clean verify
 
       - name: Upload Coverage to Codecov
+        if: hashFiles('target/site/jacoco/jacoco.xml') != ''
         uses: codecov/codecov-action@v4
         with:
           file: ./target/site/jacoco/jacoco.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
-
-      - name: JaCoCo Coverage Report
-        run: mvn jacoco:report
-
-      - name: Check if code coverage meets minimum thresholds
-        run: |
-          echo "Running code coverage verification..."
-          mvn clean test jacoco:report
-
-      - name: Display Coverage Results
-        if: always()
-        run: |
-          echo "Test Coverage Report Generated"
-          if [ -f "target/site/jacoco/index.html" ]; then
-            echo "Coverage report available at target/site/jacoco/index.html"
-          fi
